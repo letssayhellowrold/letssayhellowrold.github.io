@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+
+<script>
+  MathJax = {
+    tex: {
+      packages: {'[+]': ['mhchem']},
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/C-128-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/C-32-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/C-16-16.png">
+  <link rel="mask-icon" href="/images/C.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="[object Object]"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="推销员问题 骑士周游列国 码头扩建 算法时间复杂度分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法设计与分析-绪论">
+<meta property="og:url" content="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%BB%AA%E8%AE%BA/index.html">
+<meta property="og:site_name" content="Czj&#39;s Blog">
+<meta property="og:description" content="推销员问题 骑士周游列国 码头扩建 算法时间复杂度分析">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%BB%AA%E8%AE%BA/img.png">
+<meta property="article:published_time" content="2025-03-03T01:02:57.000Z">
+<meta property="article:modified_time" content="2025-03-03T03:04:40.689Z">
+<meta property="article:author" content="Zejun Cai">
+<meta property="article:tag" content="算法设计与分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%BB%AA%E8%AE%BA/img.png">
+
+<link rel="canonical" href="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%BB%AA%E8%AE%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>算法设计与分析-绪论 | Czj's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Czj's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fas fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fas fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fas fa-list fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fas fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fas fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fas fa-download fa-fw"></i>资源</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%BB%AA%E8%AE%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Zejun Cai">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Czj's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法设计与分析-绪论
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-03-03 09:02:57 / 修改时间：11:04:40" itemprop="dateCreated datePublished" datetime="2025-03-03T09:02:57+08:00">2025-03-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">算法设计与分析</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>15k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>14 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>推销员问题</li>
+<li>骑士周游列国</li>
+<li>码头扩建</li>
+<li>算法时间复杂度分析</li>
+</ul>
+<span id="more"></span>
+<h1 id="推销员问题tsp">推销员问题（TSP）</h1>
+<h2 id="题目大意">题目大意</h2>
+<p>推销员问题（Traveling Salesman
+Problem，TSP）是一个经典的组合优化问题。在该问题中，一个推销员需要访问一系列城市，每个城市只能访问一次，最后必须回到起始城市，目标是找到一条总路径长度最短的路线。从图论角度看，可将城市视为图的节点，城市之间的路径视为图的边，边的权重表示城市间的距离，问题等价于在完全图中寻找<strong>最小权重的哈密尔顿回路</strong>。</p>
+<h2 id="解法描述">解法描述</h2>
+<h3 id="朴素穷举剪枝优化">朴素穷举+剪枝优化</h3>
+<ol type="1">
+<li><strong>算法思想</strong>：通过枚举所有可能的城市访问顺序，计算每种顺序下的路径总长度，从而找出最短路径。利用贪心法进行剪枝，在枚举过程中，如果当前路径长度已经大于已知的最小路径长度，停止对该路径后续情况的枚举。</li>
+<li><strong>实现方式</strong>：在 C++中，借助
+<code>next_permutation</code>
+函数来枚举所有城市排列。对每个排列，依次计算相邻城市间的距离并累加，得到该排列对应的路径长度。在计算过程中，一旦路径长度超过当前记录的最小路径长度，直接放弃该排列的后续计算。</li>
+<li><strong>复杂度分析</strong>
+<ul>
+<li><strong>时间复杂度</strong>：朴素穷举的时间复杂度为<span
+class="math inline">\(O(n!)\)</span>，因为需要枚举<span
+class="math inline">\(n\)</span>个城市的所有排列。虽然剪枝优化在一定程度上减少了不必要的计算，但在最坏情况下，时间复杂度仍然是<span
+class="math inline">\(O(n!)\)</span>。当城市数量<span
+class="math inline">\(n\)</span>较大时，计算量会急剧增加，导致算法效率极低。</li>
+<li><strong>空间复杂度</strong>：主要取决于存储每个排列的空间，由于只需要存储一个城市排列序列，所以空间复杂度为<span
+class="math inline">\(O(n)\)</span>。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">// 朴素解，用next_permutation函数枚举所有城市排列，在所有可能的路径长度中取最小的。最坏时间复杂度为O(n!)</span></span><br><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; g;</span><br><span class="line">vector&lt;<span class="type">int</span>&gt; cities;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> INF = <span class="number">0x3f3f3f3f</span>; <span class="comment">// 视为无穷大</span></span><br><span class="line"><span class="type">int</span> n, final_ans = INF, x; <span class="comment">// 城市数量</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">compute</span><span class="params">(<span class="type">const</span> vector&lt;<span class="type">int</span>&gt;&amp; path)</span> </span>&#123;</span><br><span class="line">	<span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; path.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">		ans += g[path[i]][path[i + <span class="number">1</span>]]; <span class="comment">// 从第i个城市到第i+1个城市</span></span><br><span class="line">		<span class="keyword">if</span> (ans &gt; final_ans) &#123;</span><br><span class="line">			<span class="keyword">return</span> final_ans;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">solve_TSP</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">cities</span><span class="params">(n)</span></span>;<span class="comment">// 城市遍历序列</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">		cities[i] = i;<span class="comment">//初始化</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">do</span> &#123;</span><br><span class="line">		<span class="type">int</span> tmp = <span class="built_in">compute</span>(cities);</span><br><span class="line">		final_ans = <span class="built_in">min</span>(final_ans, tmp);</span><br><span class="line">	&#125; <span class="keyword">while</span> (<span class="built_in">next_permutation</span>(cities.<span class="built_in">begin</span>() + <span class="number">1</span>, cities.<span class="built_in">end</span>())); <span class="comment">// 用next_permut交换各个城市的相对位置</span></span><br><span class="line">	<span class="keyword">return</span> final_ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cin &gt;&gt; n;</span><br><span class="line">	g.<span class="built_in">resize</span>(n, <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(n));</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">			cin &gt;&gt; x;</span><br><span class="line">			<span class="keyword">if</span> (x == <span class="number">-1</span>) x = INF;</span><br><span class="line">			g[i][j] = x;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; <span class="built_in">solve_TSP</span>() &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="动态规划法bellman---held---karp-算法">动态规划法（Bellman - Held
+- Karp 算法）</h3>
+<ol type="1">
+<li><strong>算法思想</strong>：将原问题划分为多个子问题，通过求解子问题的最优解，逐步构建出原问题的最优解。把所有可能的路径用二进制序列表示，其中
+1 表示对应城市已走过，0
+表示未走过。利用状态转移方程，根据已走过城市的状态和当前所在城市，计算出走到下一个未走过城市的最小消耗。<em>本做法是
+<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1171">P1171 售货员的难题 -
+洛谷</a> 的正解。</em></li>
+<li><strong>实现方式</strong>：定义两个二维数组 <code>dp</code> 和
+<code>path</code>，<code>dp[i][j]</code> 表示当前走过的城市状态为
+<code>i</code> （二进制表示）且当前位于城市 <code>j</code>
+时的最小消耗；<code>path[i][j]</code> 记录走到城市 <code>j</code>
+（状态为 <code>i</code>
+时）的前一个城市。通过三层循环，外层循环遍历所有可能的城市状态（从 <span
+class="math inline">\(1\)</span> 到 <span class="math inline">\(2^n -
+1\)</span>），中层循环在当前状态下遍历所有城市找到已走过的城市
+<code>u</code>，内层循环遍历所有城市找到未走过的城市
+<code>v</code>，更新 <code>dp</code> 数组和 <code>path</code>
+数组。最后，通过遍历所有城市，找到从所有城市回到起始城市的最小路径长度，并根据
+<code>path</code> 数组回溯出具体路径。</li>
+<li><strong>复杂度分析</strong>
+<ul>
+<li><strong>时间复杂度</strong>：算法中有三层循环，外层循环遍历<span
+class="math inline">\(2^n\)</span>种城市状态，中层和内层循环分别遍历<span
+class="math inline">\(n\)</span>个城市，所以时间复杂度为<span
+class="math inline">\(O(n^2\times2^n)\)</span>。尽管它仍然是指数级复杂度，但相比朴素穷举的<span
+class="math inline">\(O(n!)\)</span>，在实际计算中，由于利用了子问题的重叠性质，减少了重复计算，通常能在更短时间内找到最优解。</li>
+<li><strong>空间复杂度</strong>：主要由存储子问题最优解的二维数组
+<code>dp</code> 和 <code>path</code> 决定，它们的大小都是<span
+class="math inline">\((2^n)\times n\)</span>，所以空间复杂度为<span
+class="math inline">\(O(n\times2^n)\)</span>。当<span
+class="math inline">\(n\)</span>较大时，可能会面临内存不足的问题。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  使用Bellman-Held-Karp算法，时间复杂度O((2^n)*(n^2))</span></span><br><span class="line"><span class="comment">  开两个vector&lt;vector&lt;int&gt;, int&gt;数组，大小为(2^n)*n，以空间换时间</span></span><br><span class="line"><span class="comment">  本算法将所有的可能路径视为二进制序列，1为已经走过，0为未走过。</span></span><br><span class="line"><span class="comment">  不难发现，n个城市一共有2^n种序列，因此遍历他们总共需要2^n次</span></span><br><span class="line"><span class="comment">  同时在每次选取了一个序列后，还需要用双重循环来：1.在已经走过的路径中选择一个出发点 2.选择接下来要走的点（不能已经在集合中），增加将边权加入dist</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//可以处理n=23的问题，并且耗时较少。但是n更大会导致无法分配足够内存而报错</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> INF = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"></span><br><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; dp;</span><br><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; path;</span><br><span class="line">vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; g;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> final_ans, n, start_idx;</span><br><span class="line"><span class="comment">//void init() &#123;</span></span><br><span class="line"><span class="comment">//	//用assign填充</span></span><br><span class="line"><span class="comment">//	g.assign(n, vector&lt;int&gt;(n, INF));</span></span><br><span class="line"><span class="comment">//	for (int i = 0; i &lt; n; i++) &#123;</span></span><br><span class="line"><span class="comment">//		for (int j = i + 1; j &lt; n; j++) g[i][j] = g[j][i] = rand() % 100 + 1;</span></span><br><span class="line"><span class="comment">//	&#125;</span></span><br><span class="line"><span class="comment">//	dp.assign(1 &lt;&lt; n, vector&lt;int&gt;(n, INF));</span></span><br><span class="line"><span class="comment">//	path.assign(1 &lt;&lt; n, vector&lt;int&gt;(n, -1));</span></span><br><span class="line"><span class="comment">//	start_idx = 0;</span></span><br><span class="line"><span class="comment">//	dp[1 &lt;&lt; start_idx][start_idx] = 0; //从0号城市回到0号的距离为0</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Bellman_Held_Karp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">/*</span></span><br><span class="line"><span class="comment">	  dp和path的第一维用于记录当前走过的城市，第二维用于记录本次走到的终点</span></span><br><span class="line"><span class="comment">	  dp的值表示走法的最小消耗,path的值表示走终点的前一个点是谁</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; (<span class="number">1</span> &lt;&lt; n); i++) &#123; <span class="comment">//遍历2^n-1次，i是十进制表示的二进制序列</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> u = <span class="number">0</span>; u &lt; n; u++) &#123; <span class="comment">//遍历所有点，找到已经在集合中的</span></span><br><span class="line">			<span class="keyword">if</span> (i &amp; (<span class="number">1</span> &lt;&lt; u)) &#123; <span class="comment">//1&lt;&lt;u表示二进制序列中第u为是1，用&amp;来判断第u位是否都是1，是则表明点u已经在当前的路径中了</span></span><br><span class="line">				<span class="comment">//选取城市u，试图以其为起点走到城市v</span></span><br><span class="line">				<span class="keyword">for</span> (<span class="type">int</span> v = <span class="number">0</span>; v &lt; n; v++) &#123;</span><br><span class="line">					<span class="keyword">if</span> (!(i &amp; (<span class="number">1</span> &lt;&lt; v))) &#123; <span class="comment">//如果v还没走过，那就不会形成环路，可以走</span></span><br><span class="line">						<span class="keyword">if</span> (dp[i | (<span class="number">1</span> &lt;&lt; v)][v] &gt; dp[i][u] + g[u][v]) &#123;</span><br><span class="line">							dp[i | (<span class="number">1</span> &lt;&lt; v)][v]  = (dp[i | (<span class="number">1</span> &lt;&lt; v)][v], dp[i][u] + g[u][v]); <span class="comment">//检测从u走到v是否会使得路径边长，更新路径集合和其对应的值</span></span><br><span class="line">							path[i | (<span class="number">1</span> &lt;&lt; v)][v] = u;</span><br><span class="line">						&#125;</span><br><span class="line"></span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//添加最后构成回环的路径</span></span><br><span class="line">	<span class="type">int</span> final_que = (<span class="number">1</span> &lt;&lt; n) - <span class="number">1</span>; <span class="comment">//全为1的二进制序列</span></span><br><span class="line">	final_ans = INF;</span><br><span class="line">	<span class="type">int</span> last_city = <span class="number">-1</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> t = <span class="number">0</span>; t &lt; n; t++) &#123; <span class="comment">//再次遍历所有点</span></span><br><span class="line">		<span class="type">int</span> tmp = dp[final_que][t];<span class="comment">//tmp表示走过了所有点后，回到点t</span></span><br><span class="line">		<span class="type">int</span> last_w = g[t][start_idx];<span class="comment">//最后一条边的权重</span></span><br><span class="line">		<span class="keyword">if</span> (tmp + last_w &lt; final_ans) &#123;</span><br><span class="line">			final_ans = tmp + last_w;</span><br><span class="line">			last_city = t;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//读出path中存的点作为路径</span></span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; path_ans;</span><br><span class="line">	<span class="comment">//因为是环路，所以可以从后往前记录</span></span><br><span class="line">	<span class="type">int</span> current_city = last_city;</span><br><span class="line">	<span class="type">int</span> current_set = final_que;</span><br><span class="line">	<span class="keyword">while</span> (current_city != <span class="number">-1</span>) &#123; <span class="comment">//-1是path数组的初始值</span></span><br><span class="line">		path_ans.<span class="built_in">push_back</span>(current_city);</span><br><span class="line">		current_set ^= (<span class="number">1</span> &lt;&lt; current_city); <span class="comment">//将当前城市从集合中删除</span></span><br><span class="line">		current_city = path[current_set | (<span class="number">1</span> &lt;&lt; current_city)][current_city];</span><br><span class="line">		<span class="comment">//上一个城市是以这个城市为终点的边的起点，要暂时补回删掉的城市</span></span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;序列表示哈密顿回路&quot;</span> &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; start_idx &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span> x : path_ans) &#123;</span><br><span class="line">		cout &lt;&lt; x &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">puts</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print_g</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++) cout &lt;&lt; g[i][j] &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">		<span class="built_in">puts</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cin &gt;&gt; n;</span><br><span class="line">	<span class="built_in">init</span>();</span><br><span class="line"><span class="comment">//	print_g();</span></span><br><span class="line"><span class="comment">//	clock_t start_t = clock();</span></span><br><span class="line">	<span class="built_in">Bellman_Held_Karp</span>();</span><br><span class="line"><span class="comment">//	clock_t end_t = clock();</span></span><br><span class="line"><span class="comment">//	cout &lt;&lt; &quot;最短路径权值为&quot; &lt;&lt; final_ans &lt;&lt; endl;</span></span><br><span class="line">	cout &lt;&lt; final_ans &lt;&lt; endl;</span><br><span class="line"><span class="comment">//	double elapsed_time = (double)(end_t - start_t) / CLOCKS_PER_SEC;</span></span><br><span class="line"><span class="comment">//	cout &lt;&lt; &quot;耗时为&quot; &lt;&lt; (elapsed_time) &lt;&lt; &quot;s&quot;;</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="骑士周游列国">骑士周游列国</h1>
+<h2 id="题目大意-1">题目大意</h2>
+<p>在国际象棋 8×8 的棋盘上，给定骑士的初始位置(<span
+class="math inline">\(m\)</span>,<span
+class="math inline">\(n\)</span>)（其中 <span
+class="math inline">\(0\leq m,n\leq 8\)</span>
+），要求找出一条路径，使骑士不重不漏地经过棋盘上的每一个格子。路径需用
+8×8
+的矩阵输出，矩阵中每个元素的值表示骑士到达该位置时行走的步数，起始位置步数为
+1。</p>
+<h2 id="解法描述-1">解法描述</h2>
+<h3 id="深度优先遍历-dfs">深度优先遍历 DFS</h3>
+<ol type="1">
+<li><strong>算法思想</strong>：深度优先搜索是一种“试错”的搜索策略。从起始位置开始，按照骑士的移动规则，尝试所有可能的走法。若当前走法能继续推进（新位置未被访问过），则标记该位置并递归继续探索；若当前位置的所有走法都无法推进（新位置已被访问或越界），则回溯到上一个位置，尝试其他未探索的走法，直至遍历完整个棋盘或确定不存在可行路径。</li>
+<li><strong>实现方式</strong>：使用一个二维数组 <code>g[N][N]</code>
+表示棋盘，其中 <code>N = 8</code>。数组元素值为 0 表示该位置未被访问，非
+0 值表示骑士到达该位置的步数。定义方向数组 <code>dx[8]</code> 和
+<code>dy[8]</code> 来表示骑士的 8 种移动方向。在 <code>dfs</code>
+函数中，每次递归时检查当前位置的 8
+个可能移动方向，若新位置合法且未被访问，则标记新位置并递归调用
+<code>dfs</code> 继续探索，若递归返回 <code>true</code>
+说明找到了可行路径，直接返回；若所有方向都尝试完仍未找到可行路径，则回溯（将新位置标记回
+0）并返回
+<code>false</code>。在主函数中，读入起始位置，初始化起始位置的步数为
+1，调用 <code>dfs</code>
+函数进行搜索，若找到路径则输出棋盘矩阵，否则输出提示信息。</li>
+<li><strong>复杂度分析</strong>：
+<ul>
+<li><strong>时间复杂度</strong>：在最坏情况下，每个位置都要尝试 8
+种走法，对于 8×8 的棋盘，共有 64
+个位置。随着搜索的深入，分支数量呈指数增长，所以时间复杂度约为 <span
+class="math inline">\(O(8^{64})\)</span>，这是一个非常高的时间复杂度，意味着在大规模问题下，算法效率极低。</li>
+<li><strong>空间复杂度</strong>：空间复杂度主要取决于递归调用栈的深度。因为在最坏情况下需要遍历整个棋盘，而每次递归调用都会在栈中占用一定空间，递归深度最大为
+64，所以空间复杂度为 <span class="math inline">\(O(N^{2})\)</span>，即
+<span class="math inline">\(O(64)\)</span> 。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  本题需要在8*8棋盘中，从一个点出发找到遍历所有点的一条路径</span></span><br><span class="line"><span class="comment">  关键点：每个点都有8种可能的走法，但是最终只需要找到一条可以遍历所有点的路径</span></span><br><span class="line"><span class="comment">  因此采用dfs递归搜索，并增加返回值以表示当前所走的方向是否正确，确保在找到一条正确路径后就结束</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n, m, step;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">8</span>;</span><br><span class="line"><span class="type">int</span> g[N][N];</span><br><span class="line"><span class="type">int</span> dx[<span class="number">8</span>] = &#123;<span class="number">-2</span>, <span class="number">-1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">-1</span>, <span class="number">-2</span>&#125;, dy[<span class="number">8</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">-1</span>, <span class="number">-2</span>, <span class="number">-2</span>, <span class="number">-1</span>&#125;;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">check</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x &gt;= <span class="number">0</span> &amp;&amp; x &lt; N &amp;&amp; y &gt;= <span class="number">0</span> &amp;&amp; y &lt; N;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y, <span class="type">int</span> step)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (step &gt; <span class="number">64</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;  <span class="comment">// 找到路径后返回 true</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">		<span class="type">int</span> tx = x + dx[i], ty = y + dy[i];</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">check</span>(tx, ty) &amp;&amp; g[tx][ty] == <span class="number">0</span>) &#123;</span><br><span class="line">			g[tx][ty] = step;</span><br><span class="line">			<span class="keyword">if</span> (<span class="built_in">dfs</span>(tx, ty, step + <span class="number">1</span>)) <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">//如果是合适的路径，那就不需要回溯</span></span><br><span class="line">			<span class="keyword">else</span> g[tx][ty] = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">	g[n][m] = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">dfs</span>(n, m, <span class="number">2</span>)) &#123;</span><br><span class="line">		<span class="comment">// 如果找到路径，输出路径</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; N; j++) &#123;</span><br><span class="line">				cout &lt;&lt; g[i][j] &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="built_in">puts</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;No solution found.&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="启发式搜索-warnsdorff-规则">启发式搜索 Warnsdorff 规则</h3>
+<ol type="1">
+<li><strong>算法思想</strong>：Warnsdorff
+规则是一种启发式策略，其核心是在当前位置选择一阶落点时，优先考察各个一阶落点的可行二阶落点个数，选择可行二阶落点个数最少的一阶落点作为下一步移动方向。这样做的目的是优先选择那些周围“出路”较少的位置，使搜索更有针对性，减少不必要的回溯，提高搜索效率。</li>
+<li><strong>实现方式</strong>：在原 DFS 代码基础上进行修改。定义一个函数
+<code>get_weight</code>
+来计算某个位置的可行二阶落点个数。在每次选择下一步移动位置时，将所有可行的一阶落点及其权重（可行二阶落点个数）存入一个向量
+<code>v</code> 中，然后对向量 <code>v</code>
+按权重从小到大排序。优先尝试权重小的落点进行递归搜索，若找到可行路径则返回，否则回溯继续尝试其他落点。</li>
+<li><strong>复杂度分析</strong>：
+<ul>
+<li><strong>时间复杂度</strong>：在最坏情况下，检查每个位置的邻居时，需要考虑所有可能的移动位置，这里邻居个数
+<span class="math inline">\(N = 8\)</span>，时间复杂度为 <span
+class="math inline">\(O(N^{2})\)</span>，即 <span
+class="math inline">\(O(8^{2}) = O(64)\)</span>。但实际上，由于
+Warnsdorff
+规则的引导，搜索过程会优先选择更有可能成功的路径，大幅减少了搜索范围，基本可在线性时间内检测完棋盘上的所有点，相比朴素
+DFS 的指数级复杂度有显著优化。</li>
+<li><strong>空间复杂度</strong>：空间复杂度与 DFS
+类似，主要取决于递归深度或栈的大小。在最坏情况下，同样为 <span
+class="math inline">\(O(N^{2})\)</span> （<span
+class="math inline">\(N\)</span> 是棋盘边长），即 <span
+class="math inline">\(O(64)\)</span>。不过，由于 Warnsdorff
+规则的引导，搜索路径从八叉树退化为二叉树，使得递归深度降低。虽然这对空间复杂度的理论影响不大，但在实际运行中，对于只需求一个可行解的情况，实际空间利用效率更高，减少了不必要的空间占用。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  Warnsdorff规则：</span></span><br><span class="line"><span class="comment">  在当前位置(x,y)选择一阶落点时，先考察各个一阶落点的可行二阶落点个数，选择其中可行二阶落点个数最少一阶落点（以下暂记这个一阶落点为可行方向）</span></span><br><span class="line"><span class="comment">  有效性分析：</span></span><br><span class="line"><span class="comment">  本规则要求每次选择可行方向，不难发现，在周游初期，这个方向一定是存在的。而在后期，如果能完成一次巡游，那么可行方向也必须存在。</span></span><br><span class="line"><span class="comment">  因此可行方向一定可以构成一个正确回路（当然正确回路不一定是由可行方向组成的），由于本题只需要一个解，所以该规则有效</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">  综上，在得知Warnsdorff规则后，我们就可以对dfs进行剪枝了，以每个一阶落点的二级落点个数作为权值，从而可以将原来的满8分叉树化简为二叉或三叉树，从而更快地找到一个答案</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span>  x first</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span>  y second</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">typedef</span> pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt; PII;</span><br><span class="line"><span class="keyword">typedef</span> pair&lt;<span class="type">int</span>, PII&gt; PIPII;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N  = <span class="number">8</span>;</span><br><span class="line"><span class="type">int</span> g[N][N], x, y;</span><br><span class="line">PII direc[N] = &#123; &#123;<span class="number">1</span>, <span class="number">-2</span>&#125;, &#123;<span class="number">2</span>, <span class="number">1</span>&#125;, &#123;<span class="number">2</span>, <span class="number">-1</span>&#125;, &#123;<span class="number">-1</span>, <span class="number">2</span>&#125;, &#123;<span class="number">-1</span>, <span class="number">-2</span>&#125;, &#123;<span class="number">-2</span>, <span class="number">1</span>&#125;, &#123;<span class="number">-2</span>, <span class="number">-1</span>&#125;, &#123;<span class="number">1</span>, <span class="number">2</span>&#125;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">ok</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x &gt;= <span class="number">0</span> &amp;&amp; x &lt; N &amp;&amp; y &gt;= <span class="number">0</span> &amp;&amp; y &lt; N &amp;&amp; g[x][y] == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print_g</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; N; j++) &#123;</span><br><span class="line">			cout &lt;&lt; g[i][j] &lt;&lt; <span class="string">&quot; \n&quot;</span>[j == N - <span class="number">1</span>];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">get_weight</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">	<span class="type">int</span> tx, ty, res = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">		tx = x + direc[i].x, ty = y + direc[i].y;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">ok</span>(tx, ty)) res++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y, <span class="type">int</span> step)</span> </span>&#123; <span class="comment">//设置为bool类型以期在找到答案的第一时间结束递归</span></span><br><span class="line">	<span class="keyword">if</span> (step == <span class="number">65</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">	<span class="type">int</span> tx, ty;</span><br><span class="line">	vector&lt;PIPII&gt; v;<span class="comment">//存放本次检测的所有一阶落点和他们的权重</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">		tx = x + direc[i].x, ty = y + direc[i].y;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">ok</span>(tx, ty))v.<span class="built_in">push_back</span>(&#123;<span class="built_in">get_weight</span>(tx, ty), &#123;tx, ty&#125;&#125;);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">sort</span>(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>());</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span> t : v) &#123;</span><br><span class="line">		g[t.y.x][t.y.y] = step;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">dfs</span>(t.y.x, t.y.y, step + <span class="number">1</span>)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		g[t.y.x][t.y.y] = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cin &gt;&gt; x &gt;&gt; y;</span><br><span class="line">	g[x][y] = <span class="number">1</span>;</span><br><span class="line">	<span class="built_in">dfs</span>(x, y, <span class="number">2</span>);</span><br><span class="line">	<span class="built_in">print_g</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一种可能的周游路径如下： <img src="img.png" title="img"
+alt="img" /></p>
+<h1 id="码头扩建问题">码头扩建问题</h1>
+<h2 id="题目大意-2">题目大意</h2>
+<p>某市有一码头，每次仅允许一艘船停泊装卸货。根据历史资料，码头平均每月停船
+24 艘，每艘船的停泊时间为 24±20 小时，相邻两艘船的到达时间间隔为 30±15
+小时。若一艘船因有其他船在港而等候 1 小时，其消耗成本为 1000
+元。扩建码头大约需要 1350
+万元。要求通过程序随机产生到达时间和停泊时间，模拟未来五年内船的停泊情况，多次模拟预测停泊情况，以判断未来五年内停泊船只因等候的成本消耗总和是否超过扩建码头花费，从而帮助市长做出是否扩建码头的决策。</p>
+<h2 id="解法描述-2">解法描述</h2>
+<h3 id="离散事件模拟算法">离散事件模拟算法</h3>
+<ol type="1">
+<li><strong>算法思想</strong>：利用离散事件模拟的方法，将未来五年的时间按月划分，通过循环模拟每个月内船只的到达和停泊过程。在模拟过程中，借助随机数生成符合条件的船只到达时间间隔和停泊时间，根据船只到达时码头的状态（是否有船正在停泊）来计算等待时间和成本，最后累加所有模拟次数的成本并求平均，与扩建码头的成本阈值进行比较，得出是否扩建的结论。</li>
+<li><strong>实现方式</strong>：在 C++中，使用
+<code>&lt;random&gt;</code> 库生成随机数。<code>random_device rd</code>
+用于生成随机数种子，<code>mt19937 gen(rd())</code>
+创建一个基于种子的随机数生成器。通过两层嵌套循环进行模拟，外层循环控制模拟的总次数（如
+1000 次），内层循环模拟每个月（共 60
+个月）的情况。对于每个月，假设第一艘船在最开始到达，生成其停泊时间。后续船只根据上一艘船的到达和停泊时间计算自身到达时间，若到达时上一艘船还在停靠，则计算等待成本，更新停泊时间；若无需等待，则直接更新停泊时间。每次模拟结束后累加总成本，最后根据总成本与扩建成本阈值的比较结果输出决策信息。</li>
+<li><strong>复杂度分析</strong>：
+<ul>
+<li><strong>时间复杂度</strong>：外层循环执行次数为模拟总次数，设为
+<code>test</code>，时间复杂度为 <span
+class="math inline">\(O(test)\)</span>。内层循环执行 60
+次，内层循环中的计算操作，如随机数生成、条件判断和成本计算等，都是常数时间操作，时间复杂度为
+<span class="math inline">\(O(1)\)</span>。所以总体时间复杂度为 <span
+class="math inline">\(O(test×1)\)</span>，即 <span
+class="math inline">\(O(test)\)</span>
+。当模拟次数增加时，运行时间会线性增长。</li>
+<li><strong>空间复杂度</strong>：程序中主要使用了几个整型变量（如
+<code>spend</code>、<code>dock_time</code>、<code>arrival_time</code>
+等）和一个长整型变量（<code>cost</code>）来存储数据，这些变量占用的存储空间是常数级别的。随机数生成器的存储空间与生成器的状态大小相关，但在本实验中，其状态大小也是常数级别的，不会对空间复杂度产生显著影响。因此，总体空间复杂度为
+<span class="math inline">\(O(1)\)</span>
+，即无论模拟次数和数据规模如何变化，程序占用的空间基本保持不变。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  为了简化情况，本模拟将五年按月划分开，即以一个月为基础编写代码，并循环5*12次</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">const</span> <span class="type">long</span> <span class="type">long</span>  Max = <span class="number">1.35e7</span>;</span><br><span class="line"><span class="type">int</span> spend, pre = <span class="number">1000</span>;</span><br><span class="line"><span class="type">int</span> dock_time, arrival_time;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> cost, tmp_cost;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//生成随机数</span></span><br><span class="line">	random_device rd;<span class="comment">//声名一个随机数种子对象。命名为rd</span></span><br><span class="line">	<span class="function">mt19937 <span class="title">gen</span><span class="params">(rd())</span></span>;<span class="comment">//创建了一个 mt19937 类的对象，它使用前面声明的 rd 对象生成的种子进行构造。这个对象被命名为 gen。</span></span><br><span class="line">	<span class="comment">//uniform_int_distribution&lt;&gt;，均匀分布的随机数生成器</span></span><br><span class="line">	<span class="comment">//下述的arrival_interval和docking_time是一个类，接受gen作为参数</span></span><br><span class="line">	uniform_int_distribution&lt;&gt; <span class="built_in">arrival_interval</span>(<span class="number">15</span>, <span class="number">45</span>);<span class="comment">//到达时间</span></span><br><span class="line">	uniform_int_distribution&lt;&gt; <span class="built_in">docking_time</span>(<span class="number">4</span>, <span class="number">44</span>);<span class="comment">//停泊时间</span></span><br><span class="line"><span class="comment">//进行一千次模拟</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> t = <span class="number">1</span>; t &lt;= <span class="number">1000</span>; t++) &#123;</span><br><span class="line">		tmp_cost = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> month = <span class="number">1</span>; month &lt;= <span class="number">60</span>; month++) &#123;</span><br><span class="line">			<span class="comment">//不考虑从月末停留到月初的情况</span></span><br><span class="line">			<span class="comment">//不妨假设第一艘船是在最开始到达的</span></span><br><span class="line">			dock_time = arrival_time = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span> (<span class="type">int</span> ship = <span class="number">1</span>; ship &lt;= <span class="number">24</span>; ship++) &#123;</span><br><span class="line">				<span class="keyword">if</span> (ship == <span class="number">1</span>) &#123;</span><br><span class="line">					dock_time = <span class="built_in">docking_time</span>(gen);<span class="comment">//开始卸货</span></span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					<span class="comment">//本船到达</span></span><br><span class="line">					arrival_time += <span class="built_in">arrival_interval</span>(gen);<span class="comment">//增加表示间隔时间</span></span><br><span class="line">					<span class="keyword">if</span> (arrival_time &lt; dock_time) &#123;</span><br><span class="line">						<span class="comment">//到达时上一艘船还在停靠</span></span><br><span class="line"></span><br><span class="line">						tmp_cost += (dock_time - arrival_time) * pre;</span><br><span class="line">						dock_time += <span class="built_in">docking_time</span>(gen); <span class="comment">//本船还不能进港操作，必须等上一只船结束</span></span><br><span class="line">					&#125; <span class="keyword">else</span> dock_time = arrival_time + <span class="built_in">docking_time</span>(gen); <span class="comment">//无需等待，那就是入港时间加自身卸货</span></span><br><span class="line">				&#125;</span><br><span class="line"><span class="comment">//				dock_time = docking_time(gen);</span></span><br><span class="line"><span class="comment">//				arrival_time = arrival_interval(gen);</span></span><br><span class="line"><span class="comment">//				if (dock_time &gt; arrival_time) tmp_cost += 1000 * (dock_time - arrival_time);</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		cost += tmp_cost / <span class="number">1000</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (cost &gt; Max) cout &lt;&lt; <span class="string">&quot;超支了&quot;</span> &lt;&lt; cost - Max &lt;&lt; <span class="string">&quot;元&quot;</span> &lt;&lt; <span class="string">&quot;应该扩建&quot;</span> &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">&quot;距离超支还有%lld元，不用扩建&quot;</span>, (Max - cost));</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="算法时间复杂度的实验测试">算法时间复杂度的实验测试</h1>
+<h2 id="题目大意-3">题目大意</h2>
+<p>运用编程工具对堆排序或快速排序算法进行时间复杂度测试，通过在不同输入规模下运行算法并记录运行时间，从而学会通过实验分析算法的时间复杂度。</p>
+<h2 id="解法描述-3">解法描述</h2>
+<h3 id="堆排序算法">堆排序算法</h3>
+<ol type="1">
+<li><strong>算法思想</strong>：基于二叉堆数据结构，以构建大根堆为例实现从小到大排序。首先将输入数组进行堆化操作，使每个节点都满足大根堆性质，即父节点的值大于等于子节点的值。然后不断将堆顶元素（最大值）与数组末尾元素交换，将最大值放到数组末尾，接着对交换后的堆进行调整，维持堆的性质，重复该过程直到整个数组有序。</li>
+<li><strong>实现方式</strong>：在 C++代码中，定义数组
+<code>heap[N]</code> 存储待排序数据，<code>N</code>
+为数组最大容量。<code>down</code>
+函数用于调整堆，在函数中，通过比较当前节点与其左右子节点的值，将最大值交换到当前节点位置，并递归向下调整。在
+<code>main</code> 函数中，利用 <code>&lt;random&gt;</code>
+库生成随机数填充数组。排序前使用 <code>clock()</code>
+函数记录起始时间，排序过程先对数组进行堆化（从 <code>n/2</code> 到
+<code>0</code> 调用 <code>down</code>
+函数），然后通过不断交换堆顶和末尾元素并调整堆（共 <code>n</code>
+次）实现排序。排序结束后再次使用 <code>clock()</code>
+函数记录结束时间，计算并输出排序耗时。</li>
+<li><strong>复杂度分析</strong>：
+<ul>
+<li><strong>时间复杂度</strong>：堆排序的时间复杂度为 <span
+class="math inline">\(O(n log n)\)</span>。堆构建阶段，从
+<code>n/2</code> 到 <code>0</code> 调用 <code>down</code>
+函数，每次调整操作的时间复杂度为 <span class="math inline">\(O(log
+n)\)</span>，总共进行约 <span class="math inline">\(n/2\)</span>
+次，时间复杂度为 <span class="math inline">\(O(n log n)\)</span>
+；排序阶段，进行 <code>n</code>
+次交换和调整堆操作，每次调整堆的时间复杂度也是 <span
+class="math inline">\(O(log n)\)</span>，整体排序阶段时间复杂度同样为
+<span class="math inline">\(O(n log n)\)</span>。</li>
+<li><strong>空间复杂度</strong>：堆排序仅使用了常数级别的额外空间，如在调整堆过程中临时变量的存储，因此空间复杂度为
+<span class="math inline">\(O(1)\)</span>。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1e8</span>;</span><br><span class="line"><span class="type">int</span> heap[N];<span class="comment">//大根堆实现从小到大排列</span></span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">down</span><span class="params">(<span class="type">int</span> idx)</span> </span>&#123;</span><br><span class="line">	<span class="type">int</span> tmp = idx;</span><br><span class="line">	<span class="comment">//大根堆的根应该是最大的</span></span><br><span class="line">	<span class="comment">//在idx，2*idx+1，2*idx三者中找到值最大的那一个</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="number">2</span> * idx &lt;= n &amp;&amp; heap[tmp] &lt; heap[idx * <span class="number">2</span>]) tmp = idx * <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">if</span> (<span class="number">2</span> * idx + <span class="number">1</span> &lt;= n &amp;&amp; heap[tmp] &lt; heap[idx * <span class="number">2</span> + <span class="number">1</span>]) tmp = idx * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span> (tmp != idx) &#123;</span><br><span class="line">		<span class="built_in">swap</span>(heap[idx], heap[tmp]);<span class="comment">//让最大值来到根的位置</span></span><br><span class="line">		<span class="built_in">down</span>(tmp);<span class="comment">//递归向下交换，使小的值向下，大的值向上</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//生成随机数构造器</span></span><br><span class="line">	random_device rd;<span class="comment">//声名一个随机数种子对象。命名为rd</span></span><br><span class="line">	<span class="function">mt19937 <span class="title">gen</span><span class="params">(rd())</span></span>;<span class="comment">//创建了一个 mt19937 类的对象，它使用前面声明的 rd 对象生成的种子进行构造。这个对象被命名为 gen。</span></span><br><span class="line">	uniform_int_distribution&lt;&gt; <span class="built_in">random_num</span>(<span class="number">0</span>, <span class="number">10000000</span>);<span class="comment">//均匀分布的随机数</span></span><br><span class="line">	<span class="comment">//填充随机数</span></span><br><span class="line">	cin &gt;&gt; n;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">		<span class="comment">//从一开始存避免找子节点时找到自己</span></span><br><span class="line">		heap[i] = <span class="built_in">random_num</span>(gen);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//排序开始</span></span><br><span class="line">	<span class="type">clock_t</span> <span class="type">start_t</span> = <span class="built_in">clock</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = n / <span class="number">2</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">		<span class="built_in">down</span>(i);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (i &lt;= n) &#123;</span><br><span class="line">		<span class="built_in">swap</span>(heap[<span class="number">1</span>], heap[n]);<span class="comment">//交换n次，将大值放在尾部，相当于从堆里剔除</span></span><br><span class="line">		n--;</span><br><span class="line">		<span class="built_in">down</span>(<span class="number">1</span>);</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">clock_t</span> <span class="type">end_t</span> = <span class="built_in">clock</span>();</span><br><span class="line">	<span class="type">double</span> elapsed_time = (<span class="type">double</span>)(<span class="type">end_t</span> - <span class="type">start_t</span>) / CLOCKS_PER_SEC * <span class="number">1000</span>;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;耗时为&quot;</span> &lt;&lt; (elapsed_time) &lt;&lt; <span class="string">&quot;ms&quot;</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="快速排序算法">快速排序算法</h3>
+<ol type="1">
+<li><strong>算法思想</strong>：采用分治策略。选择一个基准元素，将数组分为两个子数组，使得左边子数组的元素都小于基准元素，右边子数组的元素都大于基准元素。然后递归地对左右子数组进行排序，最后合并各个有序子数组得到最终的有序数组。</li>
+<li><strong>实现方式</strong>：代码中定义数组 <code>q[N]</code>
+存储数据。<code>quick_sort</code>
+函数实现快速排序逻辑，函数中先选取一个基准元素（这里取数组中间元素
+<code>q[(l + r) &gt;&gt; 1]</code>），通过双指针<code>i</code>和<code>j</code>从数组两端向中间扫描，将小于基准的元素放到左边，大于基准的元素放到右边。当
+<code>i</code> 和 <code>j</code>
+相遇时，完成一次划分，接着递归对左右子数组进行排序。在 <code>main</code>
+函数中，同样利用 <code>&lt;random&gt;</code>
+库生成随机数填充数组，记录排序前后的时间，计算并输出排序耗时。</li>
+<li><strong>复杂度分析</strong>：
+<ul>
+<li><strong>时间复杂度</strong>：快速排序平均时间复杂度为 <span
+class="math inline">\(O(n log
+n)\)</span>。在平均情况下，每次划分都能将数组大致均匀分成两部分，递归深度为
+<span class="math inline">\(log n\)</span>，每层划分操作的时间复杂度为
+<span class="math inline">\(O(n)\)</span>，整体时间复杂度为 <span
+class="math inline">\(O(n log
+n)\)</span>。但在最坏情况下，如每次选取的基准元素都是数组中的最大或最小值，划分会极度不均匀，时间复杂度会退化为
+<span class="math inline">\(O(n^2)\)</span> 。</li>
+<li><strong>空间复杂度</strong>：快速排序的空间复杂度主要取决于递归调用的栈空间。平均情况下，递归深度为
+<span class="math inline">\(log n\)</span>，因此空间复杂度为 <span
+class="math inline">\(O(log n)\)</span>；在最坏情况下，递归深度达到
+<span class="math inline">\(n\)</span>，空间复杂度为 <span
+class="math inline">\(O(n)\)</span> 。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1e8</span>;</span><br><span class="line"><span class="type">int</span> q[N];<span class="comment">//大根堆实现从小到大排列</span></span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">quick_sort</span><span class="params">(<span class="type">int</span> q[], <span class="type">int</span> l, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (l &gt;= r) &#123;</span><br><span class="line">		<span class="keyword">return</span>;<span class="comment">//左右指针相遇</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">int</span> x = q[(l + r) &gt;&gt; <span class="number">1</span>]; <span class="comment">//随便取一个标定</span></span><br><span class="line">	<span class="type">int</span> i = l - <span class="number">1</span>, j = r + <span class="number">1</span>;<span class="comment">//选不可能点</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">		<span class="keyword">do</span> i++;</span><br><span class="line">		<span class="keyword">while</span> (q[i] &lt; x);</span><br><span class="line">		<span class="keyword">do</span> j--;</span><br><span class="line">		<span class="keyword">while</span> (q[j] &gt; x);</span><br><span class="line">		<span class="keyword">if</span> (i &lt; j) &#123;</span><br><span class="line">			<span class="built_in">swap</span>(q[i], q[j]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//结束后[l,j]的数都比x要小，[j+1,r]的数都比x要大</span></span><br><span class="line">	<span class="built_in">quick_sort</span>(q, l, j), <span class="built_in">quick_sort</span>(q, j + <span class="number">1</span>, r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//生成随机数构造器</span></span><br><span class="line">	random_device rd;<span class="comment">//声名一个随机数种子对象。命名为rd</span></span><br><span class="line">	<span class="function">mt19937 <span class="title">gen</span><span class="params">(rd())</span></span>;<span class="comment">//创建了一个 mt19937 类的对象，它使用前面声明的 rd 对象生成的种子进行构造。这个对象被命名为 gen。</span></span><br><span class="line">	uniform_int_distribution&lt;&gt; <span class="built_in">random_num</span>(<span class="number">0</span>, <span class="number">10000000</span>);<span class="comment">//均匀分布的随机数</span></span><br><span class="line">	<span class="comment">//填充随机数</span></span><br><span class="line">	cin &gt;&gt; n;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">		q[i] = <span class="built_in">random_num</span>(gen);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">clock_t</span> <span class="type">start_t</span> = <span class="built_in">clock</span>();</span><br><span class="line">	<span class="built_in">quick_sort</span>(q, <span class="number">0</span>, n - <span class="number">1</span>);</span><br><span class="line">	<span class="type">clock_t</span> <span class="type">end_t</span> = <span class="built_in">clock</span>();</span><br><span class="line">	<span class="type">double</span> elapsed_time = (<span class="type">double</span>)(<span class="type">end_t</span> - <span class="type">start_t</span>) / CLOCKS_PER_SEC * <span class="number">1000</span>;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;耗时为&quot;</span> &lt;&lt; (elapsed_time) &lt;&lt; <span class="string">&quot;ms&quot;</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zejun Cai
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%BB%AA%E8%AE%BA/" title="算法设计与分析-绪论">http://example.com/2025/03/03/算法设计与分析-绪论/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90/" rel="tag"># 算法设计与分析</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/02/28/%E7%AC%AC%E4%B8%80%E8%AE%B2-%E6%8E%92%E5%BA%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/" rel="prev" title="第一讲-排序与枚举">
+      <i class="fa fa-chevron-left"></i> 第一讲-排序与枚举
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E9%94%80%E5%91%98%E9%97%AE%E9%A2%98tsp"><span class="nav-number">1.</span> <span class="nav-text">推销员问题（TSP）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F"><span class="nav-number">1.1.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.2.</span> <span class="nav-text">解法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%B4%E7%B4%A0%E7%A9%B7%E4%B8%BE%E5%89%AA%E6%9E%9D%E4%BC%98%E5%8C%96"><span class="nav-number">1.2.1.</span> <span class="nav-text">朴素穷举+剪枝优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%B3%95bellman---held---karp-%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.2.</span> <span class="nav-text">动态规划法（Bellman - Held
+- Karp 算法）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AA%91%E5%A3%AB%E5%91%A8%E6%B8%B8%E5%88%97%E5%9B%BD"><span class="nav-number">2.</span> <span class="nav-text">骑士周游列国</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-1"><span class="nav-number">2.1.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95%E6%8F%8F%E8%BF%B0-1"><span class="nav-number">2.2.</span> <span class="nav-text">解法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86-dfs"><span class="nav-number">2.2.1.</span> <span class="nav-text">深度优先遍历 DFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8F%91%E5%BC%8F%E6%90%9C%E7%B4%A2-warnsdorff-%E8%A7%84%E5%88%99"><span class="nav-number">2.2.2.</span> <span class="nav-text">启发式搜索 Warnsdorff 规则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A0%81%E5%A4%B4%E6%89%A9%E5%BB%BA%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">码头扩建问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-2"><span class="nav-number">3.1.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95%E6%8F%8F%E8%BF%B0-2"><span class="nav-number">3.2.</span> <span class="nav-text">解法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E4%BA%8B%E4%BB%B6%E6%A8%A1%E6%8B%9F%E7%AE%97%E6%B3%95"><span class="nav-number">3.2.1.</span> <span class="nav-text">离散事件模拟算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%9A%84%E5%AE%9E%E9%AA%8C%E6%B5%8B%E8%AF%95"><span class="nav-number">4.</span> <span class="nav-text">算法时间复杂度的实验测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-3"><span class="nav-number">4.1.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95%E6%8F%8F%E8%BF%B0-3"><span class="nav-number">4.2.</span> <span class="nav-text">解法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A0%86%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="nav-number">4.2.1.</span> <span class="nav-text">堆排序算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="nav-number">4.2.2.</span> <span class="nav-text">快速排序算法</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zejun Cai"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Zejun Cai</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/letssayhellowrold" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;letssayhellowrold" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zejun Cai</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">23k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">21 分钟</span>
+</div>
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '[object Object]';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
