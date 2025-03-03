@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+
+<script>
+  MathJax = {
+    tex: {
+      packages: {'[+]': ['mhchem']},
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/C-128-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/C-32-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/C-16-16.png">
+  <link rel="mask-icon" href="/images/C.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="[object Object]"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="二分检索（分治法）记录详情 - 洛谷 | 计算机科学教育新生态 矩阵乘法（分治法）记录详情 - 洛谷 | 计算机科学教育新生态 第 K 小元素（分治法）记录详情 - 洛谷 | 计算机科学教育新生态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法设计与分析-第一章">
+<meta property="og:url" content="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%BA%8C%E7%AB%A0/index.html">
+<meta property="og:site_name" content="Czj&#39;s Blog">
+<meta property="og:description" content="二分检索（分治法）记录详情 - 洛谷 | 计算机科学教育新生态 矩阵乘法（分治法）记录详情 - 洛谷 | 计算机科学教育新生态 第 K 小元素（分治法）记录详情 - 洛谷 | 计算机科学教育新生态">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-03T03:07:06.000Z">
+<meta property="article:modified_time" content="2025-03-03T03:49:17.280Z">
+<meta property="article:author" content="Zejun Cai">
+<meta property="article:tag" content="算法设计与分析">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%BA%8C%E7%AB%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>算法设计与分析-第一章 | Czj's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Czj's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fas fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fas fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fas fa-list fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fas fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fas fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fas fa-download fa-fw"></i>资源</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%BA%8C%E7%AB%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Zejun Cai">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Czj's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法设计与分析-第一章
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-03-03 11:07:06 / 修改时间：11:49:17" itemprop="dateCreated datePublished" datetime="2025-03-03T11:07:06+08:00">2025-03-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">算法设计与分析</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>10k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>9 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>二分检索（分治法）<a
+target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/150679164">记录详情 - 洛谷 |
+计算机科学教育新生态</a></li>
+<li>矩阵乘法（分治法）<a
+target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/150682327">记录详情 - 洛谷 |
+计算机科学教育新生态</a></li>
+<li>第 K 小元素（分治法）<a
+target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/150680931">记录详情 - 洛谷 |
+计算机科学教育新生态</a></li>
+</ul>
+<span id="more"></span>
+<h1 id="二分检索分治法">二分检索（分治法）</h1>
+<h2 id="题目大意">题目大意</h2>
+<p>给定一个大小为 <span class="math inline">\(n\)</span> 的递增整数序列
+<span class="math inline">\(L\)</span>，使用二分查找法查找任意元素 <span
+class="math inline">\(x\)</span> 在序列中的位置 <span
+class="math inline">\(k\)</span>
+（即序列中的第几个元素），若元素不存在则返回
+-1。要求编写程序实现二分查找算法，并对其时间复杂度和空间复杂度进行分析，同时通过实验评估算法性能。</p>
+<h2 id="解法描述">解法描述</h2>
+<ol type="1">
+<li><strong>算法思想</strong>：二分查找算法基于分治思想，适用于有序数组。其核心是将待查找区间不断二分，通过比较中间元素与目标元素的大小关系，确定目标元素可能存在的新区间，逐步缩小查找范围，直到找到目标元素或确定其不存在。</li>
+<li><strong>实现方式</strong>：程序中，先接收输入的序列大小 <span
+class="math inline">\(n\)</span>、序列 <span
+class="math inline">\(L\)</span> 以及要查找的元素 <span
+class="math inline">\(x\)</span>。初始化左右指针 <code>left = -1</code>
+和 <code>right = n</code>，在 <code>left &lt; right</code>
+的循环中，计算中间元素下标 <code>mid = (left + right) / 2</code>。若
+<code>a[mid] &gt;= x</code>，说明目标元素可能在左半部分，更新
+<code>right = mid</code>；若
+<code>a[mid] &lt; x</code>，则目标元素在右半部分，更新
+<code>left = mid + 1</code>。循环结束后，判断 <code>a[left]</code>
+是否等于目标元素 <code>x</code>，若相等则返回
+<code>left</code>，否则返回 -1。</li>
+<li><strong>复杂度分析</strong>：
+<ul>
+<li><strong>时间复杂度</strong>：每次迭代都将待查找区间减半，假设序列大小为
+<span class="math inline">\(n\)</span>，最多需要进行 <span
+class="math inline">\(\log n\)</span>
+次迭代就能找到目标元素或确定其不存在，所以时间复杂度为 <span
+class="math inline">\(O(\log n)\)</span>。</li>
+<li><strong>空间复杂度</strong>：算法执行过程中，除输入数据外，仅使用了几个辅助变量（如
+<code>left</code>、<code>right</code>、<code>mid</code>），这些变量占用的空间不随输入规模
+<span class="math inline">\(n\)</span> 的变化而变化，因此空间复杂度为
+<span class="math inline">\(O(1)\)</span>。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n, x;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">100009</span>;</span><br><span class="line"><span class="type">int</span> a[N];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ios::<span class="built_in">sync_with_stdio</span>(<span class="number">0</span>);</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) cin &gt;&gt; a[i];</span><br><span class="line">    cin &gt;&gt; x;</span><br><span class="line">    <span class="type">int</span> l = <span class="number">-1</span>, r = n;</span><br><span class="line">    <span class="keyword">while</span> (l &lt; r) &#123;</span><br><span class="line">        <span class="type">int</span> mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (a[mid] &gt;= x) r = mid;</span><br><span class="line">        <span class="keyword">else</span> l = mid + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; (a[l] == x ? l : <span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="矩阵乘法分治法">矩阵乘法（分治法）</h1>
+<h2 id="题目大意-1">题目大意</h2>
+<p>给定两个矩阵 <span class="math inline">\(A\)</span> 和 <span
+class="math inline">\(B\)</span>，使用分治法实现矩阵乘法，并与朴素矩阵乘法算法进行比较。要求编写程序实现相关算法，分析算法的正确性、时间复杂度和空间复杂度，并通过实验测试评估算法性能。</p>
+<h2 id="解法描述-1">解法描述</h2>
+<ol type="1">
+<li><strong>算法思想</strong>：
+<ul>
+<li><strong>朴素矩阵乘法</strong>：根据矩阵乘法定义，结果矩阵 <span
+class="math inline">\(C\)</span> 的每个元素 <span
+class="math inline">\(C_{ij}\)</span> 是矩阵 <span
+class="math inline">\(A\)</span> 的第 <span
+class="math inline">\(i\)</span> 行与矩阵 <span
+class="math inline">\(B\)</span> 的第 <span
+class="math inline">\(j\)</span>
+列对应元素乘积之和。通过三重循环遍历实现，时间复杂度较高，为 <span
+class="math inline">\(O(n^3)\)</span>。</li>
+<li><strong>Strassen
+分治算法</strong>：基于分治策略，将大矩阵乘法问题分解为多个小规模子矩阵乘法问题。把输入矩阵
+<span class="math inline">\(A\)</span> 和 <span
+class="math inline">\(B\)</span>
+各划分为四个大小相等的子矩阵，通过特定的加减法和 7
+次递归的子矩阵乘法，再进行线性组合得到结果矩阵。这种方法减少了乘法次数，理论上时间复杂度为
+<span class="math inline">\(O(n^{2.7})\)</span>。</li>
+</ul></li>
+<li><strong>实现方式</strong>：
+<ul>
+<li><strong>矩阵表示</strong>：使用二维向量
+<code>vector&lt;vector&lt;int&gt;&gt;</code>
+表示矩阵，方便对矩阵元素进行访问和操作。</li>
+<li><strong>辅助函数</strong>：实现矩阵加法 <code>matrixAdd</code>
+和减法 <code>matrixSubtract</code> 函数，用于 Strassen
+算法中矩阵的加减运算；实现朴素矩阵乘法 <code>matrixMultiply</code>
+函数，通过三重循环计算结果矩阵。</li>
+<li><strong>Strassen 算法实现</strong>：在 <code>strassen</code>
+函数中，先处理矩阵规模为 2
+的基本情况，直接调用朴素矩阵乘法。对于更大规模矩阵，将其分割为子矩阵，计算中间矩阵<span
+class="math inline">\(S_i\)</span> ，递归计算 7 个乘积矩阵 <span
+class="math inline">\(M_i\)</span> ，最后通过线性组合得到结果矩阵 <span
+class="math inline">\(C\)</span> 的四个子矩阵 <span
+class="math inline">\(C_{11}\)</span>、<span
+class="math inline">\(C_{12}\)</span>、<span
+class="math inline">\(C_{21}\)</span>、<span
+class="math inline">\(C_{22}\)</span>，并组合成最终结果矩阵。</li>
+</ul></li>
+<li><strong>复杂度分析</strong>：
+<ul>
+<li><strong>朴素矩阵乘法</strong>：
+<ul>
+<li><strong>时间复杂度</strong>：有三层嵌套循环，每层循环次数都为矩阵大小
+<span class="math inline">\(n\)</span>，所以时间复杂度为 <span
+class="math inline">\(O(n^3)\)</span>。</li>
+<li><strong>空间复杂度</strong>：仅使用一个结果矩阵存储最终乘积，空间复杂度为
+<span class="math inline">\(O(n^2)\)</span>。</li>
+</ul></li>
+<li><strong>Strassen 分治算法</strong>：
+<ul>
+<li><strong>时间复杂度</strong>：通过减少乘法次数，理论时间复杂度降为
+<span
+class="math inline">\(O(n^{2.7})\)</span>，但由于常数项较大，在小规模矩阵时效率可能不如朴素算法。</li>
+<li><strong>空间复杂度</strong>：与朴素矩阵乘法相同，都需要一个结果矩阵存储最终结果，空间复杂度为
+<span class="math inline">\(O(n^2)\)</span>。</li>
+</ul></li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n, N;</span><br><span class="line"><span class="keyword">typedef</span> vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; VVI;</span><br><span class="line"><span class="keyword">typedef</span> vector&lt;<span class="type">int</span>&gt; VI;</span><br><span class="line"><span class="comment">////将矩阵扩展为2的倍数</span></span><br><span class="line"><span class="comment">//VVI extendMatrix(const VVI&amp; A) &#123;</span></span><br><span class="line"><span class="comment">//    int originalSize = A.size();</span></span><br><span class="line"><span class="comment">//    int newSize = (originalSize % 2 == 0 ? originalSize : originalSize + 1);</span></span><br><span class="line"><span class="comment">//    VVI extendedMatrix(newSize, VI(newSize, 0));</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//    for (int i = 0; i &lt; originalSize; ++i)</span></span><br><span class="line"><span class="comment">//        for (int j = 0; j &lt; originalSize; ++j)</span></span><br><span class="line"><span class="comment">//            extendedMatrix[i][j] = A[i][j];</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//    return extendedMatrix;</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//// 截取矩阵大小到原始大小</span></span><br><span class="line"><span class="comment">//vector&lt;vector&lt;int&gt;&gt; truncateMatrix(const vector&lt;vector&lt;int&gt;&gt;&amp; A, int originalSize) &#123;</span></span><br><span class="line"><span class="comment">//    vector&lt;vector&lt;int&gt;&gt; truncatedMatrix(originalSize, vector&lt;int&gt;(originalSize, 0));</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//    for (int i = 0; i &lt; originalSize; ++i)</span></span><br><span class="line"><span class="comment">//        for (int j = 0; j &lt; originalSize; ++j)</span></span><br><span class="line"><span class="comment">//            truncatedMatrix[i][j] = A[i][j];</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//    return truncatedMatrix;</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//矩阵加法A+B</span></span><br><span class="line"><span class="function">VVI <span class="title">matrixAdd</span><span class="params">(<span class="type">const</span> VVI&amp; A, <span class="type">const</span> VVI&amp; B)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="function">VVI <span class="title">result</span><span class="params">(n, VI(n, <span class="number">0</span>))</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j)</span><br><span class="line">            result[i][j] = A[i][j] + B[i][j];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//矩阵减法A-B</span></span><br><span class="line"><span class="function">VVI <span class="title">matrixSubtract</span><span class="params">( <span class="type">const</span> VVI&amp; A, <span class="type">const</span> VVI&amp; B)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="function">VVI <span class="title">result</span><span class="params">(n, VI(n, <span class="number">0</span>))</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j)</span><br><span class="line">            result[i][j] = A[i][j] - B[i][j];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//矩阵乘法</span></span><br><span class="line"><span class="function">VVI <span class="title">matrixMultiply</span><span class="params">(<span class="type">const</span> VVI&amp; A, <span class="type">const</span> VVI&amp; B)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="function">VVI <span class="title">result</span><span class="params">(n, VI(n, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j)</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span> ; k &lt; n; k++)</span><br><span class="line">                result[i][j] += A[i][k] * B[k][j];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Strassen算法</span></span><br><span class="line"><span class="function">VVI <span class="title">strassen</span><span class="params">(VVI A, VVI B)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n = A.<span class="built_in">size</span>();</span><br><span class="line">    <span class="function">VVI <span class="title">result</span><span class="params">(n, VI(n, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">2</span>) &#123;</span><br><span class="line">        result = <span class="built_in">matrixMultiply</span>(A, B);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将矩阵分割成四个子矩阵</span></span><br><span class="line">    <span class="type">int</span> newSize = n / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">VVI <span class="title">A11</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">A12</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">A21</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">A22</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">VVI <span class="title">B11</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">B12</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">B21</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">B22</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将原始矩阵拆分成四个子矩阵</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; newSize; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; newSize; ++j) &#123;</span><br><span class="line">            A11[i][j] = A[i][j];</span><br><span class="line">            A12[i][j] = A[i][j + newSize];</span><br><span class="line">            A21[i][j] = A[i + newSize][j];</span><br><span class="line">            A22[i][j] = A[i + newSize][j + newSize];</span><br><span class="line"></span><br><span class="line">            B11[i][j] = B[i][j];</span><br><span class="line">            B12[i][j] = B[i][j + newSize];</span><br><span class="line">            B21[i][j] = B[i + newSize][j];</span><br><span class="line">            B22[i][j] = B[i + newSize][j + newSize];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">VVI <span class="title">S1</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">S2</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">S3</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">S4</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">S5</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">S6</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">S7</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">S8</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">S9</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line">    <span class="function">VVI <span class="title">S10</span><span class="params">(newSize, VI(newSize, <span class="number">0</span>))</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//用加减法计算这10个过程矩阵</span></span><br><span class="line"></span><br><span class="line">    S1 = <span class="built_in">matrixSubtract</span>(A12, A22);</span><br><span class="line">    S2 = <span class="built_in">matrixAdd</span>( B21, B22);</span><br><span class="line">    S3 = <span class="built_in">matrixAdd</span>( A11, A22);</span><br><span class="line">    S4 = <span class="built_in">matrixAdd</span>(B11, B22);</span><br><span class="line">    S5 = <span class="built_in">matrixSubtract</span>( A11, A21);</span><br><span class="line">    S6 = <span class="built_in">matrixAdd</span>( B11, B12);</span><br><span class="line">    S7 = <span class="built_in">matrixAdd</span>(A11, A12);</span><br><span class="line">    S8 = <span class="built_in">matrixSubtract</span>( B12, B22);</span><br><span class="line">    S9 = <span class="built_in">matrixSubtract</span>( B21, B11);</span><br><span class="line">    S10 = <span class="built_in">matrixAdd</span>(A21, A22);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//计算7次乘法</span></span><br><span class="line"></span><br><span class="line">    VVI M1 = <span class="built_in">strassen</span>(S1, S2);</span><br><span class="line">    VVI M2 = <span class="built_in">strassen</span>(S3, S4);</span><br><span class="line">    VVI M3 = <span class="built_in">strassen</span>(S5, S6);</span><br><span class="line">    VVI M4 = <span class="built_in">strassen</span>(S7, B22);</span><br><span class="line">    VVI M5 = <span class="built_in">strassen</span>(A11, S8);</span><br><span class="line">    VVI M6 = <span class="built_in">strassen</span>(A22, S9);</span><br><span class="line">    VVI M7 = <span class="built_in">strassen</span>(S10, B11);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//线性组合乘积矩阵</span></span><br><span class="line">    VVI C11 = <span class="built_in">matrixAdd</span>(M1, M2);</span><br><span class="line">    C11 = <span class="built_in">matrixSubtract</span>(C11, M4);</span><br><span class="line">    C11 = <span class="built_in">matrixAdd</span>(C11, M6);</span><br><span class="line"></span><br><span class="line">    VVI C12 = <span class="built_in">matrixAdd</span>(M4, M5);</span><br><span class="line">    VVI C21 = <span class="built_in">matrixAdd</span>(M6, M7);</span><br><span class="line"></span><br><span class="line">    VVI C22 = <span class="built_in">matrixSubtract</span>(M2, M3);</span><br><span class="line">    C22 = <span class="built_in">matrixAdd</span>(C22, M5);</span><br><span class="line">    C22 = <span class="built_in">matrixSubtract</span>(C22, M7);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构建结果矩阵</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; newSize; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; newSize; ++j) &#123;</span><br><span class="line">            result[i][j] = C11[i][j];</span><br><span class="line">            result[i][j + newSize] = C12[i][j];</span><br><span class="line">            result[i + newSize][j] = C21[i][j];</span><br><span class="line">            result[i + newSize][j + newSize] = C22[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">pow_2</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ((n &amp; (n - <span class="number">1</span>)) == <span class="number">0</span>) <span class="keyword">return</span> n;<span class="comment">//等于零说明只有一个1，即最高位为1</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> ((n &amp; (n - <span class="number">1</span>)) != <span class="number">0</span>) &#123;</span><br><span class="line">            n = n &amp; (n - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> n &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    cin &gt;&gt; n;</span><br><span class="line">    <span class="comment">//将n转化2的倍数</span></span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        N = <span class="number">2</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        N = <span class="built_in">pow_2</span>(n);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 随机生成1000阶方阵 a 和 b</span></span><br><span class="line">    <span class="function">VVI <span class="title">a</span><span class="params">(N, VI(N))</span>, <span class="title">b</span><span class="params">(N, VI(N))</span>, <span class="title">c</span><span class="params">(N, VI(N))</span>, <span class="title">result</span><span class="params">(N, VI(N))</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">            a[i][j] = <span class="built_in">rand</span>() % <span class="number">100</span>; <span class="comment">// 生成范围为 0 到 99 的随机数</span></span><br><span class="line">            b[i][j] = <span class="built_in">rand</span>() % <span class="number">100</span>;</span><br><span class="line"><span class="comment">//            if (i == N || j == N) a[i][j] = b[i][j] = 0;//补零</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//    //初始化二维向量</span></span><br><span class="line"><span class="comment">//    for (int i = 0; i &lt; n; i++) &#123;</span></span><br><span class="line"><span class="comment">//        for (int j = 0; j &lt; n; j++) &#123;</span></span><br><span class="line"><span class="comment">//            cin &gt;&gt; a[i][j];</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"><span class="comment">//    for (int i = 0; i &lt; n; i++) &#123;</span></span><br><span class="line"><span class="comment">//        for (int j = 0; j &lt; n; j++) &#123;</span></span><br><span class="line"><span class="comment">//            cin &gt;&gt; b[i][j];</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//    cout &lt;&lt; n &lt;&lt; endl;</span></span><br><span class="line"><span class="comment">//    for (int i = 0; i &lt; n; i++) &#123;</span></span><br><span class="line"><span class="comment">//        for (int j = 0; j &lt; n; j++) &#123;</span></span><br><span class="line"><span class="comment">//            cout &lt;&lt; a[i][j] &lt;&lt; &quot; &quot;;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"><span class="comment">//        puts(&quot;&quot;);</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"><span class="comment">//    for (int i = 0; i &lt; n; i++) &#123;</span></span><br><span class="line"><span class="comment">//        for (int j = 0; j &lt; n; j++) &#123;</span></span><br><span class="line"><span class="comment">//            cout &lt;&lt; b[i][j] &lt;&lt; &quot; &quot;;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"><span class="comment">//        puts(&quot;&quot;);</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="type">clock_t</span> <span class="type">start_t</span> = <span class="built_in">clock</span>();</span><br><span class="line">    <span class="comment">//朴素乘法，时间复杂度为O(n^3)</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt; n; k++) &#123;</span><br><span class="line">                c[i][j] += a[i][k] * b[k][j];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//    puts(&quot;&quot;);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//    for (int i = 0; i &lt; n; i++) &#123;</span></span><br><span class="line"><span class="comment">//        for (int j = 0; j &lt; n; j++) &#123;</span></span><br><span class="line"><span class="comment">//            cout &lt;&lt; c[i][j] &lt;&lt; &quot; &quot;;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     Strassen算法：</span></span><br><span class="line"><span class="comment">      对任意两个2*n阶的矩阵a和b相乘（不足偶数阶的矩阵可以补零扩展），可以将它们各划分为4个小矩阵</span></span><br><span class="line"><span class="comment">      然后将这8个矩阵使用特定的算法求7次乘积，最后将7个临时矩阵M通过加减组合得到最后的第8个结果矩阵</span></span><br><span class="line"><span class="comment">      再将这8个结果矩阵组合为目标矩阵c。</span></span><br><span class="line"><span class="comment">      优点：只有7次乘法，时间复杂度降低为O(n^2.7)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="type">clock_t</span> <span class="type">tmp_t</span> = <span class="built_in">clock</span>();</span><br><span class="line">    result = <span class="built_in">strassen</span>(a, b);</span><br><span class="line">    <span class="type">clock_t</span> <span class="type">end_t</span> = <span class="built_in">clock</span>();</span><br><span class="line"><span class="comment">//    for (int i = 0; i &lt; n; i++) &#123;</span></span><br><span class="line"><span class="comment">//        for (int j = 0; j &lt; n; j++) &#123;</span></span><br><span class="line"><span class="comment">////            if (i &gt; n - 1 || j &gt; n - 1) continue;</span></span><br><span class="line"><span class="comment">//            cout &lt;&lt; result[i][j] &lt;&lt; &quot; &quot;;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"><span class="comment">//    puts(&quot;&quot;);</span></span><br><span class="line">    <span class="type">double</span> time1 = (<span class="type">double</span>)(<span class="type">tmp_t</span> - <span class="type">start_t</span>) / CLOCKS_PER_SEC * <span class="number">1000</span>;</span><br><span class="line">    <span class="type">double</span> time2 = (<span class="type">double</span>)(<span class="type">end_t</span> - <span class="type">tmp_t</span>) / CLOCKS_PER_SEC * <span class="number">1000</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;朴素解法耗时为&quot;</span> &lt;&lt; (time1) &lt;&lt; <span class="string">&quot;ms\n&quot;</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;strassen分治法耗时为&quot;</span> &lt;&lt; (time2) &lt;&lt; <span class="string">&quot;ms&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">5</span></span><br><span class="line"><span class="comment">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</span></span><br><span class="line"><span class="comment">1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h1 id="第-k-小元素分治法">第 K 小元素（分治法）</h1>
+<h2 id="题目大意-2">题目大意</h2>
+<p>给定一个长度为 <span class="math inline">\(n\)</span>
+的整数序列，找出其中第 <span class="math inline">\(k\)</span>
+小的元素。要求运用分治法思想，编写程序实现该功能，并对算法的正确性、时间复杂度和空间复杂度进行分析，通过实验测试验证算法。</p>
+<h2 id="解法描述-2">解法描述</h2>
+<ol type="1">
+<li><strong>算法思想</strong>：借鉴快速排序的分区思想，将序列划分为两部分。通过不断递归，在合适的子序列中查找第
+<span class="math inline">\(k\)</span> 小的元素。对于长度较小（小于等于
+5）的子序列，直接排序后获取第 <span class="math inline">\(k\)</span>
+小元素；对于长度大于 5 的子序列，先划分为多个大小为 5
+的子序列，找到这些子序列中位数的中位数作为分界点，根据分界点与<span
+class="math inline">\(k\)</span>的关系，确定下一步搜索的子序列。</li>
+<li><strong>实现方式</strong>：程序中，<code>paration</code>
+函数实现类似快速排序的分区操作，以给定元素
+<code>k</code>（这里是中位数）为基准，将数组分为两部分，使得左边元素小于
+<code>k</code>，右边元素大于
+<code>k</code>，并返回分界点位置。<code>select</code>
+函数用于递归查找第<span
+class="math inline">\(k\)</span>小的元素，当子序列长度小于等于 5
+时，直接排序返回第<span
+class="math inline">\(k\)</span>小元素；否则，将子序列划分为大小为 5
+的子序列，排序后将中位数置于数组前部分，递归找到中位数的中位数
+<code>x</code>，以 <code>x</code>为基准分区，根据 <code>k</code>
+与分区点位置的关系，在左半部分或右半部分继续递归查找。</li>
+<li><strong>复杂度分析</strong>：
+<ul>
+<li><strong>时间复杂度</strong>：每次递归都能将搜索范围缩小，虽然每次递归处理的子序列规模不同，但总体上递归深度不超过
+<span class="math inline">\(\log
+n\)</span>，且每次分区操作时间复杂度为线性 <span
+class="math inline">\(O(n)\)</span>，所以算法时间复杂度为 <span
+class="math inline">\(O(n)\)</span>。</li>
+<li><strong>空间复杂度</strong>：主要取决于递归调用栈的深度，由于每次递归序列规模减半，递归栈深度为
+<span class="math inline">\(O(\log
+n)\)</span>，且没有使用其他额外数据结构，所以空间复杂度为 <span
+class="math inline">\(O(\log n)\)</span>。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> inf = <span class="number">0x3f3f3f3f</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1e7</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> n, a[N], pos, k;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">paration</span><span class="params">(<span class="type">int</span> a[], <span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> k)</span> </span>&#123; <span class="comment">//快排</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = l; i &lt;= r; i++)</span><br><span class="line">        <span class="keyword">if</span> (a[i] == k) &#123;<span class="comment">//k是中位数</span></span><br><span class="line">            <span class="built_in">swap</span>(a[i], a[l]);<span class="comment">//把这个数放到最左端</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="type">int</span> i = l, j = r + <span class="number">1</span>;<span class="comment">//中位数作为基准，不用排</span></span><br><span class="line">    <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">        <span class="keyword">do</span> i++;</span><br><span class="line">        <span class="keyword">while</span> (a[i] &lt; k);</span><br><span class="line">        <span class="keyword">do</span> j--;</span><br><span class="line">        <span class="keyword">while</span> (a[j] &gt; k);</span><br><span class="line">        <span class="keyword">if</span> (i &lt; j) <span class="built_in">swap</span>(a[i], a[j]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">swap</span>(a[l], a[j]);<span class="comment">//把中位数放回去，此时j的左边都比a[j]即k要小</span></span><br><span class="line">    <span class="keyword">return</span> j;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">select</span><span class="params">(<span class="type">int</span> a[], <span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//在数组a[l...r]中选择第k小的元素返回</span></span><br><span class="line">    <span class="keyword">if</span> (r - l &lt; <span class="number">5</span>) &#123;</span><br><span class="line">        <span class="built_in">sort</span>(a + l, a + r + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> a[l + k - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> pos = (r - l + <span class="number">1</span>) / <span class="number">5</span>;</span><br><span class="line">    <span class="comment">//每组排序后，将中位数序列置于整个数组的前部分</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; pos; i++) &#123;<span class="comment">//选取每段的中位数</span></span><br><span class="line">        <span class="type">int</span> s = l + <span class="number">5</span> * i;</span><br><span class="line">        <span class="type">int</span> t = s + <span class="number">4</span>;</span><br><span class="line">        <span class="built_in">sort</span>(a + s, a + t + <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">swap</span>(a[l + i], a[s + <span class="number">2</span>]);<span class="comment">//将第i组的中位数放置在原数组的第(l + i)位置</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// for(int i = l;i &lt;= pos;i++) printf(&quot;%d &quot;, a[i]);</span></span><br><span class="line">    <span class="comment">//选取中位数序列的中位数</span></span><br><span class="line">    <span class="type">int</span> x = <span class="built_in">select</span>(a, l, l + pos - <span class="number">1</span>, (pos + <span class="number">1</span>) / <span class="number">2</span>);<span class="comment">//这个select一定进入if判断</span></span><br><span class="line">    <span class="type">int</span> i = <span class="built_in">paration</span>(a, l, r, x);<span class="comment">//x就是中位数的中位数，排列完后可以保证i的左右两侧的元素个数相对一致</span></span><br><span class="line">    <span class="type">int</span> j = i - l + <span class="number">1</span>;<span class="comment">//计算此时区间长度</span></span><br><span class="line">    <span class="keyword">if</span> (k == j) <span class="keyword">return</span> a[i];<span class="comment">//因为在if中已经sort了，所以直接就是有序的</span></span><br><span class="line">    <span class="keyword">if</span> (k &lt; j) <span class="keyword">return</span> <span class="built_in">select</span>(a, l, i, k);<span class="comment">//对左段排序</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="built_in">select</span>(a, i + <span class="number">1</span>, r, k - j);<span class="comment">//对右段排序</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;k);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, <span class="built_in">select</span>(a, <span class="number">1</span>, n, k));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zejun Cai
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%BA%8C%E7%AB%A0/" title="算法设计与分析-第一章">http://example.com/2025/03/03/算法设计与分析-第二章/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90/" rel="tag"># 算法设计与分析</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%B8%80%E7%AB%A0/" rel="prev" title="算法设计与分析-绪论">
+      <i class="fa fa-chevron-left"></i> 算法设计与分析-绪论
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E6%A3%80%E7%B4%A2%E5%88%86%E6%B2%BB%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">二分检索（分治法）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F"><span class="nav-number">1.1.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.2.</span> <span class="nav-text">解法描述</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95%E5%88%86%E6%B2%BB%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">矩阵乘法（分治法）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-1"><span class="nav-number">2.1.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95%E6%8F%8F%E8%BF%B0-1"><span class="nav-number">2.2.</span> <span class="nav-text">解法描述</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC-k-%E5%B0%8F%E5%85%83%E7%B4%A0%E5%88%86%E6%B2%BB%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">第 K 小元素（分治法）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-2"><span class="nav-number">3.1.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95%E6%8F%8F%E8%BF%B0-2"><span class="nav-number">3.2.</span> <span class="nav-text">解法描述</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zejun Cai"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Zejun Cai</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/letssayhellowrold" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;letssayhellowrold" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zejun Cai</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">33k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">30 分钟</span>
+</div>
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '[object Object]';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
