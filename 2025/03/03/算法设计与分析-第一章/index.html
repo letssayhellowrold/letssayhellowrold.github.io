@@ -34,16 +34,16 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="推销员问题 记录详情 - 洛谷 | 计算机科学教育新生态 骑士周游列国 记录详情 - 洛谷 | 计算机科学教育新生态 码头扩建 算法时间复杂度分析">
+  <meta name="description" content="推销员问题 骑士周游列国 码头扩建 算法时间复杂度分析">
 <meta property="og:type" content="article">
 <meta property="og:title" content="算法设计与分析-第一章">
 <meta property="og:url" content="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%B8%80%E7%AB%A0/index.html">
 <meta property="og:site_name" content="Czj&#39;s Blog">
-<meta property="og:description" content="推销员问题 记录详情 - 洛谷 | 计算机科学教育新生态 骑士周游列国 记录详情 - 洛谷 | 计算机科学教育新生态 码头扩建 算法时间复杂度分析">
+<meta property="og:description" content="推销员问题 骑士周游列国 码头扩建 算法时间复杂度分析">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%B8%80%E7%AB%A0/img.png">
 <meta property="article:published_time" content="2025-03-03T01:02:57.000Z">
-<meta property="article:modified_time" content="2025-03-03T03:50:59.708Z">
+<meta property="article:modified_time" content="2025-03-03T08:20:56.907Z">
 <meta property="article:author" content="Zejun Cai">
 <meta property="article:tag" content="算法设计与分析">
 <meta name="twitter:card" content="summary">
@@ -240,7 +240,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2025-03-03 09:02:57 / 修改时间：11:50:59" itemprop="dateCreated datePublished" datetime="2025-03-03T09:02:57+08:00">2025-03-03</time>
+              <time title="创建时间：2025-03-03 09:02:57 / 修改时间：16:20:56" itemprop="dateCreated datePublished" datetime="2025-03-03T09:02:57+08:00">2025-03-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -278,12 +278,10 @@
 
       
         <ul>
-<li>推销员问题 <a
-target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/149769403">记录详情 - 洛谷 |
-计算机科学教育新生态</a></li>
-<li>骑士周游列国 <a
-target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/149592866">记录详情 - 洛谷 |
-计算机科学教育新生态</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/149769403">推销员问题</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/149592866">骑士周游列国</a></li>
 <li>码头扩建</li>
 <li>算法时间复杂度分析</li>
 </ul>
@@ -295,11 +293,12 @@ Problem，TSP）是一个经典的组合优化问题。在该问题中，一个�
 <h2 id="解法描述">解法描述</h2>
 <h3 id="朴素穷举剪枝优化">朴素穷举+剪枝优化</h3>
 <ol type="1">
-<li><strong>算法思想</strong>：通过枚举所有可能的城市访问顺序，计算每种顺序下的路径总长度，从而找出最短路径。利用贪心法进行剪枝，在枚举过程中，如果当前路径长度已经大于已知的最小路径长度，停止对该路径后续情况的枚举。</li>
-<li><strong>实现方式</strong>：在 C++中，借助
-<code>next_permutation</code>
-函数来枚举所有城市排列。对每个排列，依次计算相邻城市间的距离并累加，得到该排列对应的路径长度。在计算过程中，一旦路径长度超过当前记录的最小路径长度，直接放弃该排列的后续计算。</li>
-<li><strong>复杂度分析</strong>
+<li><p><strong>算法思想</strong></p>
+<p>通过枚举所有可能的城市访问顺序，计算每种顺序下的路径总长度，从而找出最短路径。利用贪心法进行剪枝，在枚举过程中，如果当前路径长度已经大于已知的最小路径长度，停止对该路径后续情况的枚举。</p></li>
+<li><p><strong>实现方式</strong></p>
+<p>在 C++中，借助 <code>next_permutation</code>
+函数来枚举所有城市排列。对每个排列，依次计算相邻城市间的距离并累加，得到该排列对应的路径长度。在计算过程中，一旦路径长度超过当前记录的最小路径长度，直接放弃该排列的后续计算。</p></li>
+<li><p><strong>复杂度分析</strong></p>
 <ul>
 <li><strong>时间复杂度</strong>：朴素穷举的时间复杂度为<span
 class="math inline">\(O(n!)\)</span>，因为需要枚举<span
@@ -314,12 +313,12 @@ class="math inline">\(O(n)\)</span>。</li>
 <h3 id="动态规划法bellman---held---karp-算法">动态规划法（Bellman - Held
 - Karp 算法）</h3>
 <ol type="1">
-<li><strong>算法思想</strong>：将原问题划分为多个子问题，通过求解子问题的最优解，逐步构建出原问题的最优解。把所有可能的路径用二进制序列表示，其中
+<li><p><strong>算法思想</strong></p>
+<p>将原问题划分为多个子问题，通过求解子问题的最优解，逐步构建出原问题的最优解。把所有可能的路径用二进制序列表示，其中
 1 表示对应城市已走过，0
-表示未走过。利用状态转移方程，根据已走过城市的状态和当前所在城市，计算出走到下一个未走过城市的最小消耗。<em>本做法是
-<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1171">P1171 售货员的难题 -
-洛谷</a> 的正解。</em></li>
-<li><strong>实现方式</strong>：定义两个二维数组 <code>dp</code> 和
+表示未走过。利用状态转移方程，根据已走过城市的状态和当前所在城市，计算出走到下一个未走过城市的最小消耗。</p></li>
+<li><p><strong>实现方式</strong></p>
+<p>定义两个二维数组 <code>dp</code> 和
 <code>path</code>，<code>dp[i][j]</code> 表示当前走过的城市状态为
 <code>i</code> （二进制表示）且当前位于城市 <code>j</code>
 时的最小消耗；<code>path[i][j]</code> 记录走到城市 <code>j</code>
@@ -330,8 +329,8 @@ class="math inline">\(1\)</span> 到 <span class="math inline">\(2^n -
 <code>u</code>，内层循环遍历所有城市找到未走过的城市
 <code>v</code>，更新 <code>dp</code> 数组和 <code>path</code>
 数组。最后，通过遍历所有城市，找到从所有城市回到起始城市的最小路径长度，并根据
-<code>path</code> 数组回溯出具体路径。</li>
-<li><strong>复杂度分析</strong>
+<code>path</code> 数组回溯出具体路径。</p></li>
+<li><p><strong>复杂度分析</strong></p>
 <ul>
 <li><strong>时间复杂度</strong>：算法中有三层循环，外层循环遍历<span
 class="math inline">\(2^n\)</span>种城市状态，中层和内层循环分别遍历<span
@@ -359,10 +358,12 @@ class="math inline">\(0\leq m,n\leq 8\)</span>
 <h2 id="解法描述-1">解法描述</h2>
 <h3 id="深度优先遍历-dfs">深度优先遍历 DFS</h3>
 <ol type="1">
-<li><strong>算法思想</strong>：深度优先搜索是一种“试错”的搜索策略。从起始位置开始，按照骑士的移动规则，尝试所有可能的走法。若当前走法能继续推进（新位置未被访问过），则标记该位置并递归继续探索；若当前位置的所有走法都无法推进（新位置已被访问或越界），则回溯到上一个位置，尝试其他未探索的走法，直至遍历完整个棋盘或确定不存在可行路径。</li>
-<li><strong>实现方式</strong>：使用一个二维数组 <code>g[N][N]</code>
-表示棋盘，其中 <code>N = 8</code>。数组元素值为 0 表示该位置未被访问，非
-0 值表示骑士到达该位置的步数。定义方向数组 <code>dx[8]</code> 和
+<li><p><strong>算法思想</strong></p>
+<p>深度优先搜索是一种“试错”的搜索策略。从起始位置开始，按照骑士的移动规则，尝试所有可能的走法。若当前走法能继续推进（新位置未被访问过），则标记该位置并递归继续探索；若当前位置的所有走法都无法推进（新位置已被访问或越界），则回溯到上一个位置，尝试其他未探索的走法，直至遍历完整个棋盘或确定不存在可行路径。</p></li>
+<li><p><strong>实现方式</strong></p>
+<p>使用一个二维数组 <code>g[N][N]</code> 表示棋盘，其中
+<code>N = 8</code>。数组元素值为 0 表示该位置未被访问，非 0
+值表示骑士到达该位置的步数。定义方向数组 <code>dx[8]</code> 和
 <code>dy[8]</code> 来表示骑士的 8 种移动方向。在 <code>dfs</code>
 函数中，每次递归时检查当前位置的 8
 个可能移动方向，若新位置合法且未被访问，则标记新位置并递归调用
@@ -371,8 +372,8 @@ class="math inline">\(0\leq m,n\leq 8\)</span>
 0）并返回
 <code>false</code>。在主函数中，读入起始位置，初始化起始位置的步数为
 1，调用 <code>dfs</code>
-函数进行搜索，若找到路径则输出棋盘矩阵，否则输出提示信息。</li>
-<li><strong>复杂度分析</strong>：
+函数进行搜索，若找到路径则输出棋盘矩阵，否则输出提示信息。</p></li>
+<li><p><strong>复杂度分析</strong></p>
 <ul>
 <li><strong>时间复杂度</strong>：在最坏情况下，每个位置都要尝试 8
 种走法，对于 8×8 的棋盘，共有 64
@@ -386,23 +387,25 @@ class="math inline">\(O(8^{64})\)</span>，这是一个非常高的时间复杂�
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  本题需要在8*8棋盘中，从一个点出发找到遍历所有点的一条路径</span></span><br><span class="line"><span class="comment">  关键点：每个点都有8种可能的走法，但是最终只需要找到一条可以遍历所有点的路径</span></span><br><span class="line"><span class="comment">  因此采用dfs递归搜索，并增加返回值以表示当前所走的方向是否正确，确保在找到一条正确路径后就结束</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n, m, step;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">8</span>;</span><br><span class="line"><span class="type">int</span> g[N][N];</span><br><span class="line"><span class="type">int</span> dx[<span class="number">8</span>] = &#123;<span class="number">-2</span>, <span class="number">-1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">-1</span>, <span class="number">-2</span>&#125;, dy[<span class="number">8</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">-1</span>, <span class="number">-2</span>, <span class="number">-2</span>, <span class="number">-1</span>&#125;;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">check</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> x &gt;= <span class="number">0</span> &amp;&amp; x &lt; N &amp;&amp; y &gt;= <span class="number">0</span> &amp;&amp; y &lt; N;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y, <span class="type">int</span> step)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (step &gt; <span class="number">64</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;  <span class="comment">// 找到路径后返回 true</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</span><br><span class="line">		<span class="type">int</span> tx = x + dx[i], ty = y + dy[i];</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">check</span>(tx, ty) &amp;&amp; g[tx][ty] == <span class="number">0</span>) &#123;</span><br><span class="line">			g[tx][ty] = step;</span><br><span class="line">			<span class="keyword">if</span> (<span class="built_in">dfs</span>(tx, ty, step + <span class="number">1</span>)) <span class="keyword">return</span> <span class="literal">true</span>; <span class="comment">//如果是合适的路径，那就不需要回溯</span></span><br><span class="line">			<span class="keyword">else</span> g[tx][ty] = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">	g[n][m] = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">dfs</span>(n, m, <span class="number">2</span>)) &#123;</span><br><span class="line">		<span class="comment">// 如果找到路径，输出路径</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; N; j++) &#123;</span><br><span class="line">				cout &lt;&lt; g[i][j] &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="built_in">puts</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;No solution found.&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="启发式搜索-warnsdorff-规则">启发式搜索 Warnsdorff 规则</h3>
 <ol type="1">
-<li><strong>算法思想</strong>：Warnsdorff
-规则是一种启发式策略，其核心是在当前位置选择一阶落点时，优先考察各个一阶落点的可行二阶落点个数，选择可行二阶落点个数最少的一阶落点作为下一步移动方向。这样做的目的是优先选择那些周围“出路”较少的位置，使搜索更有针对性，减少不必要的回溯，提高搜索效率。</li>
-<li><strong>实现方式</strong>：在原 DFS 代码基础上进行修改。定义一个函数
-<code>get_weight</code>
+<li><p><strong>算法思想</strong></p>
+<p>Warnsdorff
+规则是一种启发式策略，其核心是在当前位置选择一阶落点时，优先考察各个一阶落点的可行二阶落点个数，选择可行二阶落点个数最少的一阶落点作为下一步移动方向。这样做的目的是优先选择那些周围“出路”较少的位置，使搜索更有针对性，减少不必要的回溯，提高搜索效率。</p></li>
+<li><p><strong>实现方式</strong></p>
+<p>在原 DFS 代码基础上进行修改。定义一个函数 <code>get_weight</code>
 来计算某个位置的可行二阶落点个数。在每次选择下一步移动位置时，将所有可行的一阶落点及其权重（可行二阶落点个数）存入一个向量
 <code>v</code> 中，然后对向量 <code>v</code>
-按权重从小到大排序。优先尝试权重小的落点进行递归搜索，若找到可行路径则返回，否则回溯继续尝试其他落点。</li>
-<li><strong>复杂度分析</strong>：
+按权重从小到大排序。优先尝试权重小的落点进行递归搜索，若找到可行路径则返回，否则回溯继续尝试其他落点。</p></li>
+<li><p><strong>复杂度分析</strong></p>
 <ul>
-<li><strong>时间复杂度</strong>：在最坏情况下，检查每个位置的邻居时，需要考虑所有可能的移动位置，这里邻居个数
+<li><strong>时间复杂度</strong>
+在最坏情况下，检查每个位置的邻居时，需要考虑所有可能的移动位置，这里邻居个数
 <span class="math inline">\(N = 8\)</span>，时间复杂度为 <span
 class="math inline">\(O(N^{2})\)</span>，即 <span
 class="math inline">\(O(8^{2}) = O(64)\)</span>。但实际上，由于
 Warnsdorff
 规则的引导，搜索过程会优先选择更有可能成功的路径，大幅减少了搜索范围，基本可在线性时间内检测完棋盘上的所有点，相比朴素
 DFS 的指数级复杂度有显著优化。</li>
-<li><strong>空间复杂度</strong>：空间复杂度与 DFS
+<li><strong>空间复杂度</strong> 空间复杂度与 DFS
 类似，主要取决于递归深度或栈的大小。在最坏情况下，同样为 <span
 class="math inline">\(O(N^{2})\)</span> （<span
 class="math inline">\(N\)</span> 是棋盘边长），即 <span
@@ -423,14 +426,16 @@ alt="img" /></p>
 <h2 id="解法描述-2">解法描述</h2>
 <h3 id="离散事件模拟算法">离散事件模拟算法</h3>
 <ol type="1">
-<li><strong>算法思想</strong>：利用离散事件模拟的方法，将未来五年的时间按月划分，通过循环模拟每个月内船只的到达和停泊过程。在模拟过程中，借助随机数生成符合条件的船只到达时间间隔和停泊时间，根据船只到达时码头的状态（是否有船正在停泊）来计算等待时间和成本，最后累加所有模拟次数的成本并求平均，与扩建码头的成本阈值进行比较，得出是否扩建的结论。</li>
-<li><strong>实现方式</strong>：在 C++中，使用
-<code>&lt;random&gt;</code> 库生成随机数。<code>random_device rd</code>
+<li><p><strong>算法思想</strong></p>
+<p>利用离散事件模拟的方法，将未来五年的时间按月划分，通过循环模拟每个月内船只的到达和停泊过程。在模拟过程中，借助随机数生成符合条件的船只到达时间间隔和停泊时间，根据船只到达时码头的状态（是否有船正在停泊）来计算等待时间和成本，最后累加所有模拟次数的成本并求平均，与扩建码头的成本阈值进行比较，得出是否扩建的结论。</p></li>
+<li><p><strong>实现方式</strong></p>
+<p>在 C++中，使用 <code>&lt;random&gt;</code>
+库生成随机数。<code>random_device rd</code>
 用于生成随机数种子，<code>mt19937 gen(rd())</code>
 创建一个基于种子的随机数生成器。通过两层嵌套循环进行模拟，外层循环控制模拟的总次数（如
 1000 次），内层循环模拟每个月（共 60
-个月）的情况。对于每个月，假设第一艘船在最开始到达，生成其停泊时间。后续船只根据上一艘船的到达和停泊时间计算自身到达时间，若到达时上一艘船还在停靠，则计算等待成本，更新停泊时间；若无需等待，则直接更新停泊时间。每次模拟结束后累加总成本，最后根据总成本与扩建成本阈值的比较结果输出决策信息。</li>
-<li><strong>复杂度分析</strong>：
+个月）的情况。对于每个月，假设第一艘船在最开始到达，生成其停泊时间。后续船只根据上一艘船的到达和停泊时间计算自身到达时间，若到达时上一艘船还在停靠，则计算等待成本，更新停泊时间；若无需等待，则直接更新停泊时间。每次模拟结束后累加总成本，最后根据总成本与扩建成本阈值的比较结果输出决策信息。</p></li>
+<li><p><strong>复杂度分析</strong></p>
 <ul>
 <li><strong>时间复杂度</strong>：外层循环执行次数为模拟总次数，设为
 <code>test</code>，时间复杂度为 <span
@@ -454,10 +459,11 @@ class="math inline">\(O(test)\)</span>
 <h2 id="解法描述-3">解法描述</h2>
 <h3 id="堆排序算法">堆排序算法</h3>
 <ol type="1">
-<li><strong>算法思想</strong>：基于二叉堆数据结构，以构建大根堆为例实现从小到大排序。首先将输入数组进行堆化操作，使每个节点都满足大根堆性质，即父节点的值大于等于子节点的值。然后不断将堆顶元素（最大值）与数组末尾元素交换，将最大值放到数组末尾，接着对交换后的堆进行调整，维持堆的性质，重复该过程直到整个数组有序。</li>
-<li><strong>实现方式</strong>：在 C++代码中，定义数组
-<code>heap[N]</code> 存储待排序数据，<code>N</code>
-为数组最大容量。<code>down</code>
+<li><p><strong>算法思想</strong></p>
+<p>基于二叉堆数据结构，以构建大根堆为例实现从小到大排序。首先将输入数组进行堆化操作，使每个节点都满足大根堆性质，即父节点的值大于等于子节点的值。然后不断将堆顶元素（最大值）与数组末尾元素交换，将最大值放到数组末尾，接着对交换后的堆进行调整，维持堆的性质，重复该过程直到整个数组有序。</p></li>
+<li><p><strong>实现方式</strong></p>
+<p>在 C++代码中，定义数组 <code>heap[N]</code>
+存储待排序数据，<code>N</code> 为数组最大容量。<code>down</code>
 函数用于调整堆，在函数中，通过比较当前节点与其左右子节点的值，将最大值交换到当前节点位置，并递归向下调整。在
 <code>main</code> 函数中，利用 <code>&lt;random&gt;</code>
 库生成随机数填充数组。排序前使用 <code>clock()</code>
@@ -465,8 +471,8 @@ class="math inline">\(O(test)\)</span>
 <code>0</code> 调用 <code>down</code>
 函数），然后通过不断交换堆顶和末尾元素并调整堆（共 <code>n</code>
 次）实现排序。排序结束后再次使用 <code>clock()</code>
-函数记录结束时间，计算并输出排序耗时。</li>
-<li><strong>复杂度分析</strong>：
+函数记录结束时间，计算并输出排序耗时。</p></li>
+<li><p><strong>复杂度分析</strong></p>
 <ul>
 <li><strong>时间复杂度</strong>：堆排序的时间复杂度为 <span
 class="math inline">\(O(n log n)\)</span>。堆构建阶段，从
@@ -485,17 +491,18 @@ class="math inline">\(O(log n)\)</span>，整体排序阶段时间复杂度同�
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1e8</span>;</span><br><span class="line"><span class="type">int</span> heap[N];<span class="comment">//大根堆实现从小到大排列</span></span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">down</span><span class="params">(<span class="type">int</span> idx)</span> </span>&#123;</span><br><span class="line">	<span class="type">int</span> tmp = idx;</span><br><span class="line">	<span class="comment">//大根堆的根应该是最大的</span></span><br><span class="line">	<span class="comment">//在idx，2*idx+1，2*idx三者中找到值最大的那一个</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="number">2</span> * idx &lt;= n &amp;&amp; heap[tmp] &lt; heap[idx * <span class="number">2</span>]) tmp = idx * <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">if</span> (<span class="number">2</span> * idx + <span class="number">1</span> &lt;= n &amp;&amp; heap[tmp] &lt; heap[idx * <span class="number">2</span> + <span class="number">1</span>]) tmp = idx * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span> (tmp != idx) &#123;</span><br><span class="line">		<span class="built_in">swap</span>(heap[idx], heap[tmp]);<span class="comment">//让最大值来到根的位置</span></span><br><span class="line">		<span class="built_in">down</span>(tmp);<span class="comment">//递归向下交换，使小的值向下，大的值向上</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">//生成随机数构造器</span></span><br><span class="line">	random_device rd;<span class="comment">//声名一个随机数种子对象。命名为rd</span></span><br><span class="line">	<span class="function">mt19937 <span class="title">gen</span><span class="params">(rd())</span></span>;<span class="comment">//创建了一个 mt19937 类的对象，它使用前面声明的 rd 对象生成的种子进行构造。这个对象被命名为 gen。</span></span><br><span class="line">	uniform_int_distribution&lt;&gt; <span class="built_in">random_num</span>(<span class="number">0</span>, <span class="number">10000000</span>);<span class="comment">//均匀分布的随机数</span></span><br><span class="line">	<span class="comment">//填充随机数</span></span><br><span class="line">	cin &gt;&gt; n;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">		<span class="comment">//从一开始存避免找子节点时找到自己</span></span><br><span class="line">		heap[i] = <span class="built_in">random_num</span>(gen);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//排序开始</span></span><br><span class="line">	<span class="type">clock_t</span> <span class="type">start_t</span> = <span class="built_in">clock</span>();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = n / <span class="number">2</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">		<span class="built_in">down</span>(i);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">int</span> i = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (i &lt;= n) &#123;</span><br><span class="line">		<span class="built_in">swap</span>(heap[<span class="number">1</span>], heap[n]);<span class="comment">//交换n次，将大值放在尾部，相当于从堆里剔除</span></span><br><span class="line">		n--;</span><br><span class="line">		<span class="built_in">down</span>(<span class="number">1</span>);</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">clock_t</span> <span class="type">end_t</span> = <span class="built_in">clock</span>();</span><br><span class="line">	<span class="type">double</span> elapsed_time = (<span class="type">double</span>)(<span class="type">end_t</span> - <span class="type">start_t</span>) / CLOCKS_PER_SEC * <span class="number">1000</span>;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;耗时为&quot;</span> &lt;&lt; (elapsed_time) &lt;&lt; <span class="string">&quot;ms&quot;</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="快速排序算法">快速排序算法</h3>
 <ol type="1">
-<li><strong>算法思想</strong>：采用分治策略。选择一个基准元素，将数组分为两个子数组，使得左边子数组的元素都小于基准元素，右边子数组的元素都大于基准元素。然后递归地对左右子数组进行排序，最后合并各个有序子数组得到最终的有序数组。</li>
-<li><strong>实现方式</strong>：代码中定义数组 <code>q[N]</code>
-存储数据。<code>quick_sort</code>
+<li><p><strong>算法思想</strong></p>
+<p>采用分治策略。选择一个基准元素，将数组分为两个子数组，使得左边子数组的元素都小于基准元素，右边子数组的元素都大于基准元素。然后递归地对左右子数组进行排序，最后合并各个有序子数组得到最终的有序数组。</p></li>
+<li><p><strong>实现方式</strong></p>
+<p>代码中定义数组 <code>q[N]</code> 存储数据。<code>quick_sort</code>
 函数实现快速排序逻辑，函数中先选取一个基准元素（这里取数组中间元素
 <code>q[(l + r) &gt;&gt; 1]</code>），通过双指针 <code>i</code>和
 <code>j</code>从数组两端向中间扫描，将小于基准的元素放到左边，大于基准的元素放到右边。当
 <code>i</code> 和 <code>j</code>
 相遇时，完成一次划分，接着递归对左右子数组进行排序。在 <code>main</code>
 函数中，同样利用 <code>&lt;random&gt;</code>
-库生成随机数填充数组，记录排序前后的时间，计算并输出排序耗时。</li>
-<li><strong>复杂度分析</strong>：
+库生成随机数填充数组，记录排序前后的时间，计算并输出排序耗时。</p></li>
+<li><p><strong>复杂度分析</strong></p>
 <ul>
 <li><strong>时间复杂度</strong>：快速排序平均时间复杂度为 <span
 class="math inline">\(O(n log
@@ -630,7 +637,7 @@ class="math inline">\(O(n)\)</span> 。</li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -685,13 +692,13 @@ class="math inline">\(O(n)\)</span> 。</li>
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">36k</span>
+    <span title="站点总字数">55k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">33 分钟</span>
+    <span title="站点阅读时长">50 分钟</span>
 </div>
         
 

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+
+<script>
+  MathJax = {
+    tex: {
+      packages: {'[+]': ['mhchem']},
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/C-128-128.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/C-32-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/C-16-16.png">
+  <link rel="mask-icon" href="/images/C.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="[object Object]"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="0&#x2F;1 背包问题（回溯法） [NOIP 2002 普及组] 选数 [USACO1.5] 八皇后 Checker Challenge">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法设计与分析-第五章">
+<meta property="og:url" content="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%BA%94%E7%AB%A0/index.html">
+<meta property="og:site_name" content="Czj&#39;s Blog">
+<meta property="og:description" content="0&#x2F;1 背包问题（回溯法） [NOIP 2002 普及组] 选数 [USACO1.5] 八皇后 Checker Challenge">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-03T07:04:39.000Z">
+<meta property="article:modified_time" content="2025-03-03T08:17:58.118Z">
+<meta property="article:author" content="Zejun Cai">
+<meta property="article:tag" content="算法设计与分析">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%BA%94%E7%AB%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>算法设计与分析-第五章 | Czj's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Czj's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fas fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fas fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fas fa-list fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fas fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fas fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fas fa-download fa-fw"></i>资源</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%BA%94%E7%AB%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Zejun Cai">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Czj's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          算法设计与分析-第五章
+        </h1>
+
+        <div class="post-meta">
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-03-03 15:04:39 / 修改时间：16:17:58" itemprop="dateCreated datePublished" datetime="2025-03-03T15:04:39+08:00">2025-03-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">算法设计与分析</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/159902568">0/1
+背包问题（回溯法）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/159080419">[NOIP 2002
+普及组] 选数</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/159082068">[USACO1.5]
+八皇后 Checker Challenge</a></li>
+</ul>
+<span id="more"></span>
+<h1 id="背包回溯法">0/1 背包（回溯法）</h1>
+<h2 id="题目大意">题目大意</h2>
+<p>给定一组物品，每个物品都有各自的重量和价值，同时给定一个背包的容量。要求在背包容量的限制下，选择物品装入背包，使得装入背包的物品总价值最大，且每个物品只能选择一次，最后输出这个最大总价值。</p>
+<h2 id="解法描述">解法描述</h2>
+<h3 id="回溯算法">回溯算法</h3>
+<ol type="1">
+<li><p><strong>算法思想</strong></p>
+<p>回溯算法采用深度优先搜索策略，递归探索所有可能的物品选择组合，遍历解空间树。在搜索过程中，尝试将物品放入或不放入背包，构建可能的解。到达递归边界（考虑完所有物品）时，记录当前组合的总价值并与已记录的最大价值比较，若更大则更新最大价值。不断回溯尝试其他组合，直至找到最优解。</p></li>
+<li><p><strong>实现方式</strong></p>
+<ul>
+<li><strong>核心函数</strong>：<code>dfs</code>函数接收当前物品索引<code>u</code>、背包已装物品总重量<code>sum</code>、总价值<code>val</code>和剩余物品总价值<code>rem</code>。若<code>u &gt; n</code>，比较并更新最大价值<code>ans</code>；若<code>sum &gt; m</code>或<code>rem + val &lt; ans</code>，直接返回。否则，递归考虑放入和不放入当前物品的情况。</li>
+<li><strong>主函数流程</strong>：在<code>main</code>函数中，读入<code>n</code>、<code>m</code>和物品的重量、价值，计算总重量<code>tmp_w</code>和总价值<code>tmp_v</code>。若<code>tmp_w &lt;= m</code>，直接输出<code>tmp_v</code>；否则调用<code>dfs(1, 0, 0, tmp_v)</code>进行回溯搜索，最后输出最大价值<code>ans</code>。</li>
+</ul></li>
+<li><p><strong>复杂度分析</strong></p>
+<ul>
+<li><strong>时间复杂度</strong>：每个物品有放入或不放入两种选择，对于<code>n</code>个物品，时间复杂度为<span
+class="math inline">\(O(2^n)\)</span>，物品数量增加时，运行时间呈指数级增长。</li>
+<li><strong>空间复杂度</strong>：主要取决于递归调用栈深度，最坏情况下深度为<code>n</code>，空间复杂度为<span
+class="math inline">\(O(n)\)</span>。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1e4</span> + <span class="number">9</span>;</span><br><span class="line"><span class="type">int</span> n, m, v[N], w[N], tmp_w, tmp_v, ans;</span><br><span class="line"><span class="comment">//int f[N];</span></span><br><span class="line"><span class="comment">//int n, m, v[N], w[N], ans, tmp;</span></span><br><span class="line"><span class="comment">//bool st[N];</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> sum, <span class="type">int</span> val, <span class="type">int</span> rem)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (u &gt; n) &#123;</span><br><span class="line">		<span class="keyword">if</span> (ans &lt; val) &#123;</span><br><span class="line">			ans = val;</span><br><span class="line">			cout &lt;&lt; ans &lt;&lt; endl;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (sum &gt; m) <span class="keyword">return</span> ;</span><br><span class="line">	<span class="keyword">if</span> (rem + val &lt; ans) <span class="keyword">return</span>;</span><br><span class="line">	<span class="built_in">dfs</span>(u + <span class="number">1</span>, sum, val, rem - v[u]);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">dfs</span>(u + <span class="number">1</span>, sum + w[u], val + v[u], rem - v[u]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	ios::<span class="built_in">sync_with_stdio</span>(<span class="number">0</span>);</span><br><span class="line">	cin.<span class="built_in">tie</span>(<span class="number">0</span>), cout.<span class="built_in">tie</span>(<span class="number">0</span>);</span><br><span class="line">	cin &gt;&gt; n &gt;&gt; m;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">		cin &gt;&gt; w[i];</span><br><span class="line">		tmp_w += w[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">		cin &gt;&gt; v[i];</span><br><span class="line">		tmp_v += v[i];</span><br><span class="line">	&#125;</span><br><span class="line"><span class="comment">//	for (int i = 1; i &lt;= n; i++) &#123;</span></span><br><span class="line"><span class="comment">//		cout &lt;&lt; &quot;质量是&quot; &lt;&lt; w[i] &lt;&lt; &quot; &quot; &lt;&lt; &quot;价值是&quot; &lt;&lt; v[i] &lt;&lt; endl;</span></span><br><span class="line"><span class="comment">//	&#125;</span></span><br><span class="line">	<span class="keyword">if</span> (tmp_w &lt;= m) &#123;</span><br><span class="line">		cout &lt;&lt; tmp_v &lt;&lt; endl;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//用dfs来做</span></span><br><span class="line">	<span class="built_in">dfs</span>(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, tmp_v);</span><br><span class="line"></span><br><span class="line">	cout &lt;&lt; ans;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="noip-2002-普及组-选数">[NOIP 2002 普及组] 选数</h1>
+<h2 id="题目大意-1">题目大意</h2>
+<p>给定一个包含<span
+class="math inline">\(n\)</span>个整数的集合，从该集合中选取<span
+class="math inline">\(k\)</span>个元素，找出所有满足这<span
+class="math inline">\(k\)</span>个元素之和为素数的组合，最后输出满足条件的组合数量。</p>
+<h2 id="解法描述-1">解法描述</h2>
+<h3 id="回溯算法-1">回溯算法</h3>
+<ol type="1">
+<li><p><strong>算法思想</strong></p>
+<p>回溯算法通过深度优先搜索的方式遍历所有可能的组合情况。它从空组合开始，逐步添加元素，在每一步决策中，尝试选择当前未被选择的元素加入组合，直到组合中元素个数达到<span
+class="math inline">\(k\)</span>个。然后检查该组合元素之和是否为素数，如果是，则将满足条件的组合数量加
+1。通过不断回溯，撤销之前的选择，尝试其他可能的组合，从而找出所有符合条件的组合。</p></li>
+<li><p><strong>实现方式</strong></p>
+<ul>
+<li><strong>素数判断函数</strong>：<code>check(int x)</code>函数用于判断一个数是否为素数。通过从
+2 到<span
+class="math inline">\(\sqrt{x}\)</span>遍历，如果能找到一个数<span
+class="math inline">\(i\)</span>使得<span
+class="math inline">\(x\)</span>能被<span
+class="math inline">\(i\)</span>整除，则<span
+class="math inline">\(x\)</span>为合数，返回 0；否则<span
+class="math inline">\(x\)</span>为素数，返回 1。</li>
+<li><strong>递归搜索函数</strong>：<code>dfs(int u, int sum, int start)</code>是核心递归函数。<code>u</code>表示当前已选择的元素个数，<code>sum</code>表示当前组合的元素之和，<code>start</code>表示从集合中的第<code>start</code>个元素开始考虑选择。当<code>u == k</code>时，说明已选择了<span
+class="math inline">\(k\)</span>个元素，调用<code>check(sum)</code>检查当前组合的和是否为素数，若是则<code>ans++</code>，然后返回。否则，从<code>start</code>开始，遍历集合中的元素，对于每个元素，递归调用<code>dfs(u + 1, sum + x[i], i + 1)</code>，即选择该元素加入组合，继续搜索下一个元素。</li>
+</ul></li>
+<li><p><strong>复杂度分析</strong></p>
+<ul>
+<li><strong>时间复杂度</strong>：算法的时间复杂度为<span
+class="math inline">\(O(n^k)\)</span>。因为在选择<span
+class="math inline">\(k\)</span>个元素的过程中，对于每一个位置的元素选择，都有<span
+class="math inline">\(n\)</span>种可能（在选择第一个元素时有<span
+class="math inline">\(n\)</span>种选择，选择第二个元素时有<span
+class="math inline">\(n -
+1\)</span>种选择，但由于从<code>start</code>开始，整体可近似看作每次都有<span
+class="math inline">\(n\)</span>种选择的复杂度），所以总的时间复杂度为<span
+class="math inline">\(n\)</span>的<span
+class="math inline">\(k\)</span>次方。随着<span
+class="math inline">\(n\)</span>和<span
+class="math inline">\(k\)</span>的增大，算法运行时间会快速增长。</li>
+<li><strong>空间复杂度</strong>：空间复杂度主要由递归调用栈的深度决定。在最坏情况下，递归深度为<span
+class="math inline">\(k\)</span>（即选择<span
+class="math inline">\(k\)</span>个元素的过程），所以空间复杂度为<span
+class="math inline">\(O(k)\)</span>。此外，代码中还使用了一些辅助变量，如数组<code>x</code>和<code>st</code>，但它们的空间复杂度相对较小，不影响整体空间复杂度的量级。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  选数本质上是一个组合问题</span></span><br><span class="line"><span class="comment">  因此可以考虑让选取有顺序，避免构建成排列树</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">int</span> n, k, ans;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">20</span>;</span><br><span class="line"><span class="type">int</span> x[N];</span><br><span class="line"><span class="type">bool</span> st[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">check</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//返回0说明是合数，返回1说明是素数</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= x / i; i++) &#123;</span><br><span class="line">		<span class="keyword">if</span> (x % i == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> sum, <span class="type">int</span> start)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (u == k) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">check</span>(sum)) &#123;</span><br><span class="line">			ans++;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = start; i &lt; n; i++) &#123;</span><br><span class="line">		<span class="built_in">dfs</span>(u + <span class="number">1</span>, sum + x[i], i + <span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cin &gt;&gt; n &gt;&gt; k;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">		cin &gt;&gt; x[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">dfs</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	cout &lt;&lt; ans &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="usaco1.5-八皇后-checker-challenge">[USACO1.5] 八皇后 Checker
+Challenge</h1>
+<h2 id="题目大意-2">题目大意</h2>
+<p>在一个 <span class="math inline">\(n\times n\)</span> 的棋盘上放置
+<span class="math inline">\(n\)</span>
+个棋子，要求每行、每列有且仅有一个棋子，并且每条对角线（包括两条主对角线的所有平行线）上至多有一个棋子。需要找出所有满足条件的棋子放置方案。</p>
+<h2 id="解法描述-2">解法描述</h2>
+<h3 id="回溯算法-2">回溯算法</h3>
+<ol type="1">
+<li><p><strong>算法思想</strong></p>
+<p>回溯算法是一种深度优先搜索策略，用于解决组合优化问题。对于八皇后问题，我们需要在棋盘上逐步尝试放置棋子，每放置一个棋子，都要检查其是否满足题目所规定的约束条件（每行、每列、每条对角线最多一个棋子）。如果满足条件，就继续在后续行放置棋子；如果不满足，就撤销当前放置，尝试其他位置。通过不断地尝试和回溯，遍历所有可能的放置方案，找出满足条件的解。</p></li>
+<li><p><strong>实现方式</strong></p>
+<ul>
+<li><strong>分解问题</strong>：八皇后问题可以分解为逐行放置棋子的子问题。因为每行只能放置一个棋子，所以我们可以按行依次考虑，对于每一行，尝试在不同的列放置棋子。</li>
+<li><strong>状态表示</strong>：为了判断某一列、某条对角线是否已经有棋子，我们需要合适的数据结构来记录状态。对于列，我们可以用一个一维数组
+<code>col</code> 来标记，<code>col[i]</code> 表示第 <code>i</code>
+列是否有棋子；对于对角线，由于从左上到右下的对角线可由
+<code>i + j</code> 唯一标识，从右上到左下的对角线可由
+<code>j - i + n</code> 唯一标识，所以分别用 <code>deg</code> 和
+<code>udeg</code> 数组来标记这两类对角线的状态。</li>
+<li><strong>约束条件检查</strong>：在尝试放置一个棋子时，我们需要检查该位置所在的列、两条对角线是否已经有棋子。如果这些位置都没有棋子，说明该放置是合法的，可以继续递归处理下一行；否则，需要尝试其他列。</li>
+<li><strong>回溯机制</strong>：当在某一行的所有列都尝试过，或者在某一步发现无法继续放置合法的棋子时，我们需要回溯到上一行，撤销上一行的放置，然后尝试该行的其他列。</li>
+</ul></li>
+<li><p><strong>复杂度分析</strong></p>
+<ul>
+<li><strong>时间复杂度</strong>：在最坏情况下，对于每一行都有 <span
+class="math inline">\(n\)</span> 种可能的放置位置，总共需要处理 <span
+class="math inline">\(n\)</span> 行，因此时间复杂度为 <span
+class="math inline">\(O(n^n)\)</span>。随着 <span
+class="math inline">\(n\)</span> 的增大，算法的运行时间会急剧增加。</li>
+<li><strong>空间复杂度</strong>：主要的空间开销来自递归调用栈和辅助数组。递归调用栈的深度最大为
+<span class="math inline">\(n\)</span>，而辅助数组
+<code>col</code>、<code>deg</code>、<code>udeg</code> 和 <code>g</code>
+的空间复杂度均为 <span
+class="math inline">\(O(n^2)\)</span>，所以总的空间复杂度为 <span
+class="math inline">\(O(n^2)\)</span>。</li>
+</ul></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">int</span> n, ans;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">20</span>;</span><br><span class="line"><span class="type">bool</span> g[N][N], col[N], deg[N], udeg[N];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span>  <span class="title">dfs</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (u == n) &#123;</span><br><span class="line">		<span class="keyword">if</span> (ans &lt; <span class="number">3</span>) &#123;</span><br><span class="line">			<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">				<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt;= n; j++) &#123;</span><br><span class="line">					<span class="keyword">if</span> (g[i][j]) cout &lt;&lt; j + <span class="number">1</span> &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			cout &lt;&lt; endl;</span><br><span class="line">		&#125;</span><br><span class="line">		ans++;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> ;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">		<span class="keyword">if</span> (!col[i] &amp;&amp; !deg[i + u] &amp;&amp; !udeg[i - u + n]) &#123;</span><br><span class="line">			col[i] = deg[i + u] = udeg[i - u + n] = <span class="number">1</span>;</span><br><span class="line">			g[u][i] = <span class="number">1</span>;</span><br><span class="line">			<span class="built_in">dfs</span>(u + <span class="number">1</span>);</span><br><span class="line">			g[u][i] = <span class="number">0</span>;</span><br><span class="line">			col[i] = deg[i + u] = udeg[i - u + n] = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cin &gt;&gt; n;</span><br><span class="line">	<span class="built_in">dfs</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	cout &lt;&lt; ans;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Zejun Cai
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%BA%94%E7%AB%A0/" title="算法设计与分析-第五章">http://example.com/2025/03/03/算法设计与分析-第五章/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90/" rel="tag"># 算法设计与分析</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E5%9B%9B%E7%AB%A0/" rel="prev" title="算法设计与分析-第四章">
+      <i class="fa fa-chevron-left"></i> 算法设计与分析-第四章
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E5%85%AD%E7%AB%A0/" rel="next" title="算法设计与分析-第六章">
+      算法设计与分析-第六章 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E5%8C%85%E5%9B%9E%E6%BA%AF%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">0&#x2F;1 背包（回溯法）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F"><span class="nav-number">1.1.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.2.</span> <span class="nav-text">解法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.1.</span> <span class="nav-text">回溯算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#noip-2002-%E6%99%AE%E5%8F%8A%E7%BB%84-%E9%80%89%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">[NOIP 2002 普及组] 选数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-1"><span class="nav-number">2.1.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95%E6%8F%8F%E8%BF%B0-1"><span class="nav-number">2.2.</span> <span class="nav-text">解法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">回溯算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#usaco1.5-%E5%85%AB%E7%9A%87%E5%90%8E-checker-challenge"><span class="nav-number">3.</span> <span class="nav-text">[USACO1.5] 八皇后 Checker
+Challenge</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F-2"><span class="nav-number">3.1.</span> <span class="nav-text">题目大意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95%E6%8F%8F%E8%BF%B0-2"><span class="nav-number">3.2.</span> <span class="nav-text">解法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95-2"><span class="nav-number">3.2.1.</span> <span class="nav-text">回溯算法</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zejun Cai"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Zejun Cai</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/letssayhellowrold" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;letssayhellowrold" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zejun Cai</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">55k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">50 分钟</span>
+</div>
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+          load: ['[tex]/mhchem'],
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+          packages: {'[+]': ['mhchem']},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '[object Object]';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

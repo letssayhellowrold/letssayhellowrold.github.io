@@ -34,15 +34,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="二分检索（分治法）记录详情 - 洛谷 | 计算机科学教育新生态 矩阵乘法（分治法）记录详情 - 洛谷 | 计算机科学教育新生态 第 K 小元素（分治法）记录详情 - 洛谷 | 计算机科学教育新生态">
+  <meta name="description" content="二分检索（分治法） 矩阵乘法（分治法） 第 K 小元素（分治法）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="算法设计与分析-第二章">
 <meta property="og:url" content="http://example.com/2025/03/03/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%88%86%E6%9E%90-%E7%AC%AC%E4%BA%8C%E7%AB%A0/index.html">
 <meta property="og:site_name" content="Czj&#39;s Blog">
-<meta property="og:description" content="二分检索（分治法）记录详情 - 洛谷 | 计算机科学教育新生态 矩阵乘法（分治法）记录详情 - 洛谷 | 计算机科学教育新生态 第 K 小元素（分治法）记录详情 - 洛谷 | 计算机科学教育新生态">
+<meta property="og:description" content="二分检索（分治法） 矩阵乘法（分治法） 第 K 小元素（分治法）">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-03T03:07:06.000Z">
-<meta property="article:modified_time" content="2025-03-03T03:50:51.893Z">
+<meta property="article:modified_time" content="2025-03-03T08:14:41.449Z">
 <meta property="article:author" content="Zejun Cai">
 <meta property="article:tag" content="算法设计与分析">
 <meta name="twitter:card" content="summary">
@@ -238,7 +238,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2025-03-03 11:07:06 / 修改时间：11:50:51" itemprop="dateCreated datePublished" datetime="2025-03-03T11:07:06+08:00">2025-03-03</time>
+              <time title="创建时间：2025-03-03 11:07:06 / 修改时间：16:14:41" itemprop="dateCreated datePublished" datetime="2025-03-03T11:07:06+08:00">2025-03-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -256,7 +256,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>10k</span>
+              <span>9.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -276,15 +276,12 @@
 
       
         <ul>
-<li>二分检索（分治法）<a
-target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/150679164">记录详情 - 洛谷 |
-计算机科学教育新生态</a></li>
-<li>矩阵乘法（分治法）<a
-target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/150682327">记录详情 - 洛谷 |
-计算机科学教育新生态</a></li>
-<li>第 K 小元素（分治法）<a
-target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/150680931">记录详情 - 洛谷 |
-计算机科学教育新生态</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/150679164">二分检索（分治法）</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/150682327">矩阵乘法（分治法）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/record/150680931">第 K
+小元素（分治法）</a></li>
 </ul>
 <span id="more"></span>
 <h1 id="二分检索分治法">二分检索（分治法）</h1>
@@ -297,8 +294,10 @@ class="math inline">\(k\)</span>
 -1。要求编写程序实现二分查找算法，并对其时间复杂度和空间复杂度进行分析，同时通过实验评估算法性能。</p>
 <h2 id="解法描述">解法描述</h2>
 <ol type="1">
-<li><strong>算法思想</strong>：二分查找算法基于分治思想，适用于有序数组。其核心是将待查找区间不断二分，通过比较中间元素与目标元素的大小关系，确定目标元素可能存在的新区间，逐步缩小查找范围，直到找到目标元素或确定其不存在。</li>
-<li><strong>实现方式</strong>：程序中，先接收输入的序列大小 <span
+<li><p><strong>算法思想</strong></p>
+<p>二分查找算法基于分治思想，适用于有序数组。其核心是将待查找区间不断二分，通过比较中间元素与目标元素的大小关系，确定目标元素可能存在的新区间，逐步缩小查找范围，直到找到目标元素或确定其不存在。</p></li>
+<li><p><strong>实现方式</strong></p>
+<p>程序中，先接收输入的序列大小 <span
 class="math inline">\(n\)</span>、序列 <span
 class="math inline">\(L\)</span> 以及要查找的元素 <span
 class="math inline">\(x\)</span>。初始化左右指针 <code>left = -1</code>
@@ -309,8 +308,8 @@ class="math inline">\(x\)</span>。初始化左右指针 <code>left = -1</code>
 <code>a[mid] &lt; x</code>，则目标元素在右半部分，更新
 <code>left = mid + 1</code>。循环结束后，判断 <code>a[left]</code>
 是否等于目标元素 <code>x</code>，若相等则返回
-<code>left</code>，否则返回 -1。</li>
-<li><strong>复杂度分析</strong>：
+<code>left</code>，否则返回 -1。</p></li>
+<li><p><strong>复杂度分析</strong></p>
 <ul>
 <li><strong>时间复杂度</strong>：每次迭代都将待查找区间减半，假设序列大小为
 <span class="math inline">\(n\)</span>，最多需要进行 <span
@@ -330,7 +329,7 @@ class="math inline">\(O(\log n)\)</span>。</li>
 class="math inline">\(B\)</span>，使用分治法实现矩阵乘法，并与朴素矩阵乘法算法进行比较。要求编写程序实现相关算法，分析算法的正确性、时间复杂度和空间复杂度，并通过实验测试评估算法性能。</p>
 <h2 id="解法描述-1">解法描述</h2>
 <ol type="1">
-<li><strong>算法思想</strong>：
+<li><p><strong>算法思想</strong></p>
 <ul>
 <li><strong>朴素矩阵乘法</strong>：根据矩阵乘法定义，结果矩阵 <span
 class="math inline">\(C\)</span> 的每个元素 <span
@@ -349,7 +348,7 @@ class="math inline">\(B\)</span>
 次递归的子矩阵乘法，再进行线性组合得到结果矩阵。这种方法减少了乘法次数，理论上时间复杂度为
 <span class="math inline">\(O(n^{2.7})\)</span>。</li>
 </ul></li>
-<li><strong>实现方式</strong>：
+<li><p><strong>实现方式</strong></p>
 <ul>
 <li><strong>矩阵表示</strong>：使用二维向量
 <code>vector&lt;vector&lt;int&gt;&gt;</code>
@@ -369,7 +368,7 @@ class="math inline">\(C_{12}\)</span>、<span
 class="math inline">\(C_{21}\)</span>、<span
 class="math inline">\(C_{22}\)</span>，并组合成最终结果矩阵。</li>
 </ul></li>
-<li><strong>复杂度分析</strong>：
+<li><p><strong>复杂度分析</strong></p>
 <ul>
 <li><strong>朴素矩阵乘法</strong>：
 <ul>
@@ -397,13 +396,15 @@ class="math inline">\(O(n^{2.7})\)</span>，但由于常数项较大，在小规
 小的元素。要求运用分治法思想，编写程序实现该功能，并对算法的正确性、时间复杂度和空间复杂度进行分析，通过实验测试验证算法。</p>
 <h2 id="解法描述-2">解法描述</h2>
 <ol type="1">
-<li><strong>算法思想</strong>：借鉴快速排序的分区思想，将序列划分为两部分。通过不断递归，在合适的子序列中查找第
+<li><p><strong>算法思想</strong></p>
+<p>借鉴快速排序的分区思想，将序列划分为两部分。通过不断递归，在合适的子序列中查找第
 <span class="math inline">\(k\)</span> 小的元素。对于长度较小（小于等于
 5）的子序列，直接排序后获取第 <span class="math inline">\(k\)</span>
 小元素；对于长度大于 5 的子序列，先划分为多个大小为 5
 的子序列，找到这些子序列中位数的中位数作为分界点，根据分界点与<span
-class="math inline">\(k\)</span>的关系，确定下一步搜索的子序列。</li>
-<li><strong>实现方式</strong>：程序中，<code>paration</code>
+class="math inline">\(k\)</span>的关系，确定下一步搜索的子序列。</p></li>
+<li><p><strong>实现方式</strong></p>
+<p>程序中，<code>paration</code>
 函数实现类似快速排序的分区操作，以给定元素
 <code>k</code>（这里是中位数）为基准，将数组分为两部分，使得左边元素小于
 <code>k</code>，右边元素大于
@@ -414,8 +415,8 @@ class="math inline">\(k\)</span>小的元素，当子序列长度小于等于 5
 class="math inline">\(k\)</span>小元素；否则，将子序列划分为大小为 5
 的子序列，排序后将中位数置于数组前部分，递归找到中位数的中位数
 <code>x</code>，以 <code>x</code>为基准分区，根据 <code>k</code>
-与分区点位置的关系，在左半部分或右半部分继续递归查找。</li>
-<li><strong>复杂度分析</strong>：
+与分区点位置的关系，在左半部分或右半部分继续递归查找。</p></li>
+<li><p><strong>复杂度分析</strong></p>
 <ul>
 <li><strong>时间复杂度</strong>：每次递归都能将搜索范围缩小，虽然每次递归处理的子序列规模不同，但总体上递归深度不超过
 <span class="math inline">\(\log
@@ -545,7 +546,7 @@ class="math inline">\(O(\log n)\)</span>。</li>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -600,13 +601,13 @@ class="math inline">\(O(\log n)\)</span>。</li>
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">36k</span>
+    <span title="站点总字数">55k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">33 分钟</span>
+    <span title="站点阅读时长">50 分钟</span>
 </div>
         
 
